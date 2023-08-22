@@ -1,0 +1,194 @@
+/* Login */
+.Main-app {
+    text-align: center;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../component/FormMain/Account/Images/login-background.webp);
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: Helvetica, Arial, Roboto, sans-serif;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #222;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 440px;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 32px 40px;
+    box-shadow: 0 0 8px rgba(30, 40, 60, .1);
+    min-height: max-content;
+}
+
+input {
+    width: 100%;
+    height: 48px;
+    position: relative;
+    border-radius: 4px;
+    border: 1px solid silver;
+    background-color: #fff;
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+.ant-checkbox .ant-checkbox-inner {
+    min-width: 23px;
+    min-height: 23px;
+    border-color: #f4f4f4;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    min-width: 23px;
+    min-height: 23px;
+    background-color: #FF8800;
+    border-color: #f4f4f4;
+}
+
+.text {
+    text-align: left;
+    text-decoration: none;
+}
+
+.link1 {
+    color: #306BD9;
+    text-align: left;
+    text-decoration: none;
+}
+
+.link {
+    color: #306BD9;
+    text-align: left;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid silver;
+    background: #fff;
+    font-weight: 700;
+    color: #222;
+}
+
+.content {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+*,
+:after,
+:before {
+    box-sizing: border-box;
+}
+
+.footage {
+    margin-top: 21px;
+}
+
+.logo {
+    height: 360px;
+    height: 44px;
+}
+
+.small {
+    height: 18px;
+    width: 18px;
+    justify-items: center;
+    margin-right: 10px;
+}
+
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+
+hr {
+    width: 30%;
+    color: #8c8c8c;
+    height: 1px;
+    margin: 8px 0;
+    color: #222;
+    background-color: currentColor;
+    border: 1;
+    opacity: 1;
+
+}
+
+.mainbottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 8px;
+    gap: 8px;
+}
+
+.Login {
+    border-radius: 4px;
+    font-size: 1rem;
+    line-height: 1.25;
+    padding: 9px 19px;
+    margin-top: 15px;
+    color: #fff;
+    font-weight: 700;
+    background-color: #f80;
+    border-color: #f80;
+}
+
+.phattrien {
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.footer {
+    text-align: left;
+    position: fixed;
+    bottom: 24px;
+    left: 40px;
+    width: unset;
+}
+
+.footer-logo {
+    margin-right: 20px;
+    vertical-align: middle;
+    height: 20px;
+}
+
+
+/* Home */
+.Header {
+    justify-content: center;
+    text-align: center;
+    font-size: 20px;
+    min-height: 80px;
+}
+
+.Content {
+    margin: 24px 16px;
+    padding: 24px;
+    min-height: 280px;
+    background-color: white;
+}
+
+.Sider {
+    background-color: white;
+}
+
+.ant-table-tbody {
+    text-align: center;
+}
