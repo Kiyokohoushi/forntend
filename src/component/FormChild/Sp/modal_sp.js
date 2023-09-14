@@ -1,34 +1,46 @@
-import React, { useRef, useEffect } from "react";
-import { Button, Modal, Form, Input, InputNumber, Upload } from "antd";
+import React, { useEffect, useRef } from "react";
+import { Button, Modal, Form, Input, InputNumber, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 function Modal_sp(props) {
+  const [form] = Form.useForm();
   const frmSanPham = useRef();
+
   useEffect(() => {
-    //Nếu sự kiện là edit thì lấy dataEdit đổ lên các input trên form
     if (props.action === "Edit" && props.dataEdit.mSanPham) {
       frmSanPham.current?.setFieldsValue({
         ...props.dataEdit,
       });
-    } 
-    else {
+    } else {
       frmSanPham.current?.resetFields();
     }
   }, [props.dataEdit]);
 
-  async function onSave() {
-    const dataUpdate = await frmSanPham.current?.validateFields();
-    if (dataUpdate!= null) {
-      await props.save(dataUpdate);
+  async function onSave(){
+    const dataSanPham = await frmSanPham.current?.validateFields();
+    if (dataSanPham != null){
+      await axios.post('https://localhost:7177/api/SP/ThemSP',dataSanPham)
+      .then((res)=>{
+        if (res.data.Status >=1){
+          message.success('Thêm mới thành công')
+          console.log(dataSanPham);
+        }else{
+          message.error('Lỗi thêm mới')
+        }
+      })
+      .catch((error)=>{
+        console.log(error);
+      });
     }
-    await frmSanPham.current?.resetFields();
   }
+
   return (
     <>
       <Modal
         open={props.visible}
         title={
-          props.action === "Them" ? "Thêm mới sản phẩm" : "Cập nhập sản phẩm"
+          props.action === "Add" ? "Thêm mới sản phẩm" : "Cập nhập thông tin sản phẩm"
         }
         onCancel={props.onCancel}
         footer={[
@@ -40,84 +52,41 @@ function Modal_sp(props) {
           </Button>,
         ]}
       >
-        <Form ref={frmSanPham} layout="vertical" autoComplete="off">
-          <Form.Item
-            name="picture"
-            id="picture"
-            label="Hình Ảnh"
-          >
-            <Upload listType="Picture">
+        <Form form={form} ref={frmSanPham} layout="vertical" autoComplete="off">
+          <Form.Item name="picture" label="Hình ảnh" rules={[{
+            required: true,
+            message:"Vui lòng thêm ảnh"
+          }]}>
+            <Upload listType="picture">
               <Button icon={<UploadOutlined />}>Tải Lên</Button>
             </Upload>
           </Form.Item>
-
-          <Form.Item
-            name="mSanPham"
-            id="mSanPham"
-            label="Mã Sản Phẩm"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập id sản phẩm",
-              },
-            ]}
-          >
+          <Form.Item name="mSanPham" label="Mã Sản Phẩm" rules={[{
+            required: true,
+            message:"Vui lòng nhập mã sản phẩm"
+          }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="tenSP" label="Tên Sản Phẩm" rules={[{
+            required: true,
+            message:"Vui lòng nhập tên sản phẩm"
+          }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="loaiSanPham" label="Loại Sản Phẩm" rules={[{
+            required: true,
+            message:"Vui lòng nhập loại sản phấm"
+          }]}>
             <Input />
           </Form.Item>
 
-          <Form.Item
-            name="tenSP"
-            id="tenSp"
-            label="Tên Sản Phẩm"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập tên sản phẩm",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="loaiSanPham"
-            id="loaiSanPham"
-            label="Loại Sản Phẩm"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập loại sản phẩm",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="donGia"
-            id="donGia"
-            label="Giá"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập giá sản phẩm",
-              },
-            ]}
-          >
+          <Form.Item name="donGia" label="Giá" rules={[{
+            required: true,
+            message:"Vui lòng nhập đơn giá"
+          }]}>
             <InputNumber />
           </Form.Item>
-
-          <Form.Item
-            name="soLuong"
-            id="soLuong"
-            label="Số Lượng"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập số lượng sản phẩm",
-              },
-            ]}
-          >
+          <Form.Item name="soLuong" label="Số Lượng" required messageVariables={"Vui lòng nhập số lượng"}>
             <InputNumber />
           </Form.Item>
         </Form>

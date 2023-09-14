@@ -13,13 +13,11 @@ import axios from "axios";
 function Table_sp(props) {
   const [Visible, setVisibleModal] = useState(false);
   const [Action, setAction] = useState();
-  const [DSSanPham, setDSSanPham] = useState();
+  const [DSSanPham, setDSSanPham] = useState([]);
   const [DataEdit, setDataEdit] = useState();
 
-  // async and await dùng axios để tránh việc mất đồng bộ javascript
-
-  async function getDSSanPham() {
-    await axios
+  function getDSSanPham() {
+    axios
       .get("https://localhost:7177/api/SP/DanhSachSP?page=1")
       .then((res) => {
         setDSSanPham(res.data.data);
@@ -34,16 +32,17 @@ function Table_sp(props) {
     getDSSanPham();
   }, []);
 
-  function addSanPham() {
+  function showAdd() {
     setVisibleModal(true);
-    setAction("Them");
+    setAction("Add");
     setDataEdit(null);
   }
-  function showEdit(record) {
+  function showEdit(data) {
     setVisibleModal(true);
     setAction("Edit");
-    setDataEdit(record);
+    setDataEdit(data);
   }
+
   function hiddenModal() {
     setVisibleModal(false);
   }
@@ -52,45 +51,12 @@ function Table_sp(props) {
     setVisibleModal(false);
   }
 
-  async function themSanPham(dataUpdate){
-    axios.post("https://localhost:7177/api/SP/ThemSP", dataUpdate,{
-      headers: {
-        'Content-Type': 'multipart/form-data' // Định dạng của dữ liệu
-      }
-    })
-    .then((res)=> {
-      if(res.data.status >=1){
-        message.success(res.data.messeage)
-      }else{
-        message.error(res.data.messeage)
-      }
-    }).catch((error) => {
-      console.log(error)
-    });
-  }
-  async function suaSanPham(dataUpdate){
-    axios.put("https://localhost:7177/api/SP/SuaSP", dataUpdate,{
-      headers: {
-        'Content-Type': 'multipart/form-data' // Định dạng của dữ liệu
-      }
-      })
-    .then((res)=> {
-      if(res.data.status >=1){
-        message.success(res.data.messeage)
-      }else{
-        message.error(res.data.messeage)
-      }
-    }).catch((error) => {
-      console.log(error)
-    });
-  }
-
-  async function deleteSanPham(mSanPham) {
-    await axios
-      .delete("https://localhost:7177/api/SP/XoaSP?msp=" + mSanPham)
+  function deleteSanPham(MSanPham) {
+    axios
+      .delete("https://localhost:7177/api/SP/XoaSP?msp=" + MSanPham)
       .then((res) => {
         if (res.data.data <= 1) {
-          message.success("Xóa thành công");
+          message.success(res.data.messeage );
           getDSSanPham();
         } else {
           message.error("Lỗi");
@@ -100,41 +66,22 @@ function Table_sp(props) {
         console.log(error);
       });
   }
-  async function save(dataUpdate){
-    //nếu là action là them thì chạy themSanPham và ngược lại
-    if(Action ==="Them"){
-      await themSanPham(dataUpdate)
-    }else{
-      await suaSanPham(dataUpdate)
-    }
-    await getDSSanPham();
-    hiddenModal();
-  }
-
-  function thaotac(record) {
+  function thaotac(data) {
     return (
       <>
         <EyeOutlined style={{ color: "#1677ff", marginLeft: "40px" }} />
         <EditOutlined
           style={{ color: "#1677ff", marginLeft: "40px" }}
-          onClick={() => showEdit(record)}
+          onClick={() => showEdit(data)}
         />
         <Popconfirm
           title="Bạn có chắc muốn xóa?"
-          onConfirm={() => deleteSanPham(record.mSanPham)}
+          onConfirm={() => deleteSanPham(data.mSanPham)}
           okText="Đồng ý"
           cancelText="Hủy"
         >
           <DeleteOutlined style={{ color: "#1677ff", marginLeft: "40px" }} />
         </Popconfirm>
-        <Modalsp
-          visible={Visible}
-          action={Action}
-          hiddenModal={hiddenModal}
-          onCancel={onCancel}
-          dataEdit={DataEdit}
-          save={save}
-        ></Modalsp>
       </>
     );
   }
@@ -199,12 +146,19 @@ function Table_sp(props) {
           color: "white",
           marginBottom: "10px",
         }}
-        onClick={() => addSanPham()}
+        onClick={showAdd}
       >
         <PlusOutlined />
         Thêm mới sản phẩm
       </Button>
       <Table columns={columns} dataSource={DSSanPham} bordered />
+      <Modalsp
+          visible={Visible}
+          action={Action}
+          hiddenModal={hiddenModal}
+          onCancel={onCancel}
+          dataEdit={DataEdit}
+        ></Modalsp>
     </div>
   );
 }

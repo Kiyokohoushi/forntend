@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../Images/logo.png";
 import facebook from "../Images/logo-facebook.png";
 import google from "../Images/Google__G__Logo.svg.webp";
@@ -9,21 +9,61 @@ import xetot from "../Images/veh-orange-logo.png";
 import viectot from "../Images/job-green-logo.png";
 
 import "../../../../css/main.css";
+import axios from "axios";
+import { Form, message } from "antd";
 
-const login = () => {
+function Login(props) {
+  const { pathname } = useLocation();
+  const [isLogin, setisLogin] = useState();
+  const navigate = useNavigate();
+  const frmsdt = useRef(null);
+  const frmpass = useRef(null);
+  
+  
+
+  async function onFinish() {
+    const values = {
+      PhoneNumber:frmsdt.current.value,
+      Password: frmpass.current.value,
+    }
+    axios
+      .post("https://localhost:7177/api/TK/Login", values)
+      .then((res) => {
+        console.log(res)
+        if(res.data.status===1) {
+          navigate("/");
+          console.log(res); 
+          message.success(res.data.messeage);
+      }
+         else {
+         message.error(res.data.messeage);
+        }
+      })
+      .catch((error) => {
+        message.error("Lỗi hệ thông vui lòng liện hệ hỗ trợ khách hàng",error);
+      });
+  }
+
   return (
     <div className="Main-app">
-      <form className="form">
+      <Form className="form">
         <div className="logo">
           <img src={logo} alt="Logo" width="121px" height="44px" />
         </div>
         <h1 className="text">Đăng Nhập</h1>
-        <input type="number" name="sdt" placeholder="Số điện thoại" id="sdt" />
-        <input type="password" name="password" id="password" />
+       
+        <input type="number" ref={frmsdt} name="phoneNumber" placeholder="Số điện thoại" />
+        <input
+          type="password"
+          name="password"
+          ref={frmpass}
+          placeholder="Mật khẩu"
+        />
+       
         <Link to="/repass" className="link1">
           Quên mật khẩu
         </Link>
-        <button type="submit" className="Login">
+        <button type="submit" className="Login" onClick={onFinish}>
           ĐĂNG NHẬP
         </button>
         <div className="content">
@@ -55,7 +95,7 @@ const login = () => {
             Đăng ký tài khoản mới
           </Link>
         </p>
-      </form>
+      </Form>
       <footer>
         <div className="phattrien">
           <div className="footer">
@@ -69,6 +109,6 @@ const login = () => {
       </footer>
     </div>
   );
-};
+}
 
-export default login;
+export default Login;

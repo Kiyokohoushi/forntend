@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { React, useRef } from "react";
+import { Link, Navigate } from "react-router-dom";
 import logo from "../Images/logo.png";
 import facebook from "../Images/logo-facebook.png";
 import google from "../Images/Google__G__Logo.svg.webp";
@@ -9,25 +9,57 @@ import xetot from "../Images/veh-orange-logo.png";
 import viectot from "../Images/job-green-logo.png";
 
 import "../../../../css/main.css";
-import { Checkbox } from "antd";
+import { Checkbox, Form, message } from "antd";
+import axios from "axios";
 
-const register = () => {
+function Register() {
+  const frmName = useRef(null);
+  const frmNumber = useRef(null);
+  const frmPassword = useRef(null);
+
+  async function onFinish() {
+    const values = {
+      Name: frmName.current.value,
+      PhoneNumber: frmNumber.current.value,
+      Password: frmPassword.current.value,
+    };
+    axios
+      .post("https://localhost:7177/api/TK/Register", values)
+      .then((res) => {
+        if (res.data.status === 1) {
+          console.log(res);
+          message.success(res.data.messeage);
+        } else {
+          message.error(res.data.messeage);
+        }
+      })
+      .catch((error) => {
+        message.error("Lỗi hệ thông vui lòng liện hệ hỗ trợ khách hàng", error);
+      });
+  }
+
   return (
     <div className="Main-app">
-      <form className="form">
+      <Form className="form">
         <div className="logo">
           <img src={logo} alt="Logo" width="121px" height="44px" />
         </div>
         <h1 className="text">Đăng ký tài khoản</h1>
-        <input type="text" name="name" placeholder="Họ và tên" id="name" />
-        <input type="number" name="sdt" placeholder="Số điện thoại" id="sdt" />
-        <input type="password" name="password" id="password" />
+        <input type="text" ref={frmName} name="name" placeholder="Họ và tên" required/>
+        <input
+          type="number"
+          ref={frmNumber}
+          name="phoneNumber"
+          placeholder="Số điện thoại"
+          required
+        />
+        <input type="password" ref={frmPassword} name="password" required messageVariables={"Mật khẩu không được để trống"}/>
         <Checkbox>
           Bằng việc Đăng ký, bạn đã đọc và đồng ý với{" "}
           <Link to="/trogiup">Điều khoản sử dụng</Link> và{" "}
           <Link to="/trogiup">Chính sách bảo mật</Link> của Chợ Tốt
         </Checkbox>
-        <button type="submit" className="Login">
+        <button type="submit" className="Login" onClick={onFinish}>
           ĐĂNG KÝ
         </button>
         <div className="content">
@@ -59,7 +91,7 @@ const register = () => {
             Đăng nhập ngay
           </Link>
         </p>
-      </form>
+      </Form>
       <footer>
         <div className="phattrien">
           <div className="footer">
@@ -73,6 +105,6 @@ const register = () => {
       </footer>
     </div>
   );
-};
+}
 
-export default register;
+export default Register;

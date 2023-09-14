@@ -6,21 +6,19 @@ import Repass from "./component/FormMain/Account/Repass/repass";
 import Home from "./component/FormMain/Home/home";
 import SanPham from "./component/FormChild/Sp/SanPham";
 import XeCo from "./component/FormChild/LoaiSp/XeCo";
-import ThemMoi from "./component/FormChild/ThemMoi/themmoi";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/register" element={<Register />} />
+      <Route path="/register" element={<Register />} />
         <Route path="/repass" element={<Repass />} />
-        <Route path="/" element={<Login />}> */}
-          <Route path="/" element={<Home />}>
-            <Route path="/sanpham" element={<SanPham />} />
-            <Route path="/xeco" element={<XeCo />} />
-            <Route path="/themmoi" element={<ThemMoi />} />
+        <Route path="/" element={<Login />}>
+          <Route path="home" element={<Home />}>
+            <Route path="sanpham" element={<SanPham />} />
+            <Route path="xeco" element={<XeCo />} />
           </Route>
-        {/* </Route> */}
+        </Route>
       </Routes>
     </BrowserRouter>
   );
