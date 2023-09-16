@@ -13,12 +13,12 @@ const App = () => {
       <Routes>
       <Route path="/register" element={<Register />} />
         <Route path="/repass" element={<Repass />} />
-        <Route path="/" element={<Login />}>
-          <Route path="home" element={<Home />}>
+        <Route path="/login" element={<Login />}/>
+          <Route path="/" element={<Home />}>
             <Route path="sanpham" element={<SanPham />} />
             <Route path="xeco" element={<XeCo />} />
           </Route>
-        </Route>
+        {/* </Route> */}
       </Routes>
     </BrowserRouter>
   );

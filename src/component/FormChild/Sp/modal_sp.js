@@ -16,11 +16,11 @@ function Modal_sp(props) {
       frmSanPham.current?.resetFields();
     }
   }, [props.dataEdit]);
-
+  
   async function onSave(){
     const dataSanPham = await frmSanPham.current?.validateFields();
-    if (dataSanPham != null){
-      await axios.post('https://localhost:7177/api/SP/ThemSP',dataSanPham)
+    if (props.action==="Add" && dataSanPham != null){
+      await axios.post('https://localhost:7177/api/SP/ThemSPBase64',dataSanPham)
       .then((res)=>{
         if (res.data.Status >=1){
           message.success('Thêm mới thành công')
@@ -57,7 +57,14 @@ function Modal_sp(props) {
             required: true,
             message:"Vui lòng thêm ảnh"
           }]}>
-            <Upload listType="picture">
+            <Upload listType="picture"
+            accept=".png, .jpg, .gif, jpeg"
+            beforeUpload={(file)=>{
+              console.log({file});
+              return false;
+            }}
+            
+            >
               <Button icon={<UploadOutlined />}>Tải Lên</Button>
             </Upload>
           </Form.Item>

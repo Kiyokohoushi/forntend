@@ -13,12 +13,14 @@ import { Checkbox, Form, message } from "antd";
 import axios from "axios";
 
 function Register() {
+  const frmemail = useRef(null);
   const frmName = useRef(null);
   const frmNumber = useRef(null);
   const frmPassword = useRef(null);
 
   async function onFinish() {
     const values = {
+      email: frmemail.current.value,
       Name: frmName.current.value,
       PhoneNumber: frmNumber.current.value,
       Password: frmPassword.current.value,
@@ -40,11 +42,12 @@ function Register() {
 
   return (
     <div className="Main-app">
-      <Form className="form">
+      <Form className="form" onFinish={onFinish}>
         <div className="logo">
           <img src={logo} alt="Logo" width="121px" height="44px" />
         </div>
         <h1 className="text">Đăng ký tài khoản</h1>
+        <input type="email" ref={frmemail} name="email" placeholder="Nhập email" required/>
         <input type="text" ref={frmName} name="name" placeholder="Họ và tên" required/>
         <input
           type="number"
@@ -59,7 +62,7 @@ function Register() {
           <Link to="/trogiup">Điều khoản sử dụng</Link> và{" "}
           <Link to="/trogiup">Chính sách bảo mật</Link> của Chợ Tốt
         </Checkbox>
-        <button type="submit" className="Login" onClick={onFinish}>
+        <button type="submit" className="Login">
           ĐĂNG KÝ
         </button>
         <div className="content">

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../Images/logo.png";
 import facebook from "../Images/logo-facebook.png";
@@ -19,7 +19,10 @@ function Login(props) {
   const frmsdt = useRef(null);
   const frmpass = useRef(null);
   
-  
+  useEffect(()=> {
+    let loginCheck = localStorage.getItem("LoginCT");
+    setisLogin(loginCheck);
+  },[pathname]);
 
   async function onFinish() {
     const values = {
@@ -31,6 +34,11 @@ function Login(props) {
       .then((res) => {
         console.log(res)
         if(res.data.status===1) {
+          let loginCheckData ={
+            nndid:res.data.data.nndid,
+            TenNND:res.data.data.tenNND,
+          };
+          localStorage.setItem("LoginCT", JSON.stringify(loginCheckData));
           navigate("/");
           console.log(res); 
           message.success(res.data.messeage);
@@ -46,7 +54,7 @@ function Login(props) {
 
   return (
     <div className="Main-app">
-      <Form className="form">
+      <Form className="form" onFinish={onFinish}>
         <div className="logo">
           <img src={logo} alt="Logo" width="121px" height="44px" />
         </div>
@@ -63,7 +71,7 @@ function Login(props) {
         <Link to="/repass" className="link1">
           Quên mật khẩu
         </Link>
-        <button type="submit" className="Login" onClick={onFinish}>
+        <button type="submit" className="Login" >
           ĐĂNG NHẬP
         </button>
         <div className="content">
