@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import logo from "../Images/logo.png";
 import facebook from "../Images/logo-facebook.png";
 import google from "../Images/Google__G__Logo.svg.webp";
@@ -14,14 +14,14 @@ import { Form, message } from "antd";
 
 function Login(props) {
   const { pathname } = useLocation();
-  const [isLogin, setisLogin] = useState();
+  const [IsLogin, setIsLogin] = useState();
   const navigate = useNavigate();
   const frmsdt = useRef(null);
   const frmpass = useRef(null);
   
   useEffect(()=> {
     let loginCheck = localStorage.getItem("LoginCT");
-    setisLogin(loginCheck);
+    setIsLogin(loginCheck);
   },[pathname]);
 
   async function onFinish() {
@@ -35,8 +35,8 @@ function Login(props) {
         console.log(res)
         if(res.data.status===1) {
           let loginCheckData ={
-            nndid:res.data.data.nndid,
-            TenNND:res.data.data.tenNND,
+            status: res.data.data.status,
+            data: res.data.data.data,
           };
           localStorage.setItem("LoginCT", JSON.stringify(loginCheckData));
           navigate("/");
@@ -52,7 +52,9 @@ function Login(props) {
       });
   }
 
-  return (
+  return IsLogin? (
+    <Navigate to={"/"} replace/>
+  ):(
     <div className="Main-app">
       <Form className="form" onFinish={onFinish}>
         <div className="logo">

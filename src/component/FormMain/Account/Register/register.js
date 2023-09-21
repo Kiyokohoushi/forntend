@@ -1,5 +1,5 @@
 import { React, useRef } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../Images/logo.png";
 import facebook from "../Images/logo-facebook.png";
 import google from "../Images/Google__G__Logo.svg.webp";
@@ -13,6 +13,7 @@ import { Checkbox, Form, message } from "antd";
 import axios from "axios";
 
 function Register() {
+  const navigate = useNavigate();
   const frmemail = useRef(null);
   const frmName = useRef(null);
   const frmNumber = useRef(null);
@@ -26,9 +27,10 @@ function Register() {
       Password: frmPassword.current.value,
     };
     axios
-      .post("https://localhost:7177/api/TK/Register", values)
+      .post("https://localhost:7177/api/TK/Register", values,)
       .then((res) => {
         if (res.data.status === 1) {
+          navigate("/")
           console.log(res);
           message.success(res.data.messeage);
         } else {

@@ -27,6 +27,36 @@ function Table_sp(props) {
         console.log(error);
       });
   }
+  async function themMoi(formData) {
+    await axios
+      .post("https://localhost:7177/api/SP/ThemSP", formData)
+      .then((res) => {
+        if (res.data.status === 1) {
+          console.log(res);
+          message.success(res.data.messeage);
+        } else {
+          message.error(res.data.messeage);
+        }
+      })
+      .catch((error) => {
+        message.error("Lỗi", error);
+      });
+  }
+  async function suaSP(formData) {
+    await axios
+      .put("https://localhost:7177/api/SP/SuaSP", formData)
+      .then((res) => {
+        if (res.data.status === 1) {
+          console.log(res);
+          message.success(res.data.messeage);
+        } else {
+          message.error(res.data.messeage);
+        }
+      })
+      .catch((error) => {
+        message.error("Lỗi", error);
+      });
+  }
 
   useEffect(() => {
     getDSSanPham();
@@ -42,12 +72,12 @@ function Table_sp(props) {
     setAction("Edit");
     setDataEdit(data);
   }
-
-  function hiddenModal() {
-    setVisibleModal(false);
+  function showChiTiet(data) {
+    setVisibleModal(true);
+    setAction("ChiTiet");
+    setDataEdit(data);
   }
-
-  function onCancel() {
+  function hiddenModal() {
     setVisibleModal(false);
   }
 
@@ -56,7 +86,7 @@ function Table_sp(props) {
       .delete("https://localhost:7177/api/SP/XoaSP?msp=" + MSanPham)
       .then((res) => {
         if (res.data.data <= 1) {
-          message.success(res.data.messeage );
+          message.success(res.data.messeage);
           getDSSanPham();
         } else {
           message.error("Lỗi");
@@ -66,10 +96,22 @@ function Table_sp(props) {
         console.log(error);
       });
   }
+  async function save(formData) {
+    if (Action === "Add") {
+      await themMoi(formData);
+    } else {
+      await suaSP(formData);
+    }
+    await getDSSanPham();
+    hiddenModal();
+  }
   function thaotac(data) {
     return (
       <>
-        <EyeOutlined style={{ color: "#1677ff", marginLeft: "40px" }} />
+        <EyeOutlined
+          style={{ color: "#1677ff", marginLeft: "40px" }}
+          onClick={() => showChiTiet(data)}
+        />
         <EditOutlined
           style={{ color: "#1677ff", marginLeft: "40px" }}
           onClick={() => showEdit(data)}
@@ -153,12 +195,12 @@ function Table_sp(props) {
       </Button>
       <Table columns={columns} dataSource={DSSanPham} bordered />
       <Modalsp
-          visible={Visible}
-          action={Action}
-          hiddenModal={hiddenModal}
-          onCancel={onCancel}
-          dataEdit={DataEdit}
-        ></Modalsp>
+        visible={Visible}
+        action={Action}
+        hiddenModal={hiddenModal}
+        dataEdit={DataEdit}
+        save={save}
+      ></Modalsp>
     </div>
   );
 }

@@ -30,10 +30,10 @@ const items = [
     getItem("Mỹ Phẩm", "8"),
   ]),
   getItem("Khuyến Mãi", "9", <PercentageOutlined />),
-  getItem(<Link to="/themmoi">Thêm mới</Link>, "10", <FormOutlined />),
+  getItem(<Link to="/themSP">Thêm mới</Link>, "10", <FormOutlined />),
   getItem("Trợ Giúp", "11", <CommentOutlined />),
   getItem("Quản Trị Hệ Thống", "sub3", <SettingOutlined />, [
-    getItem("Quản Lý Tài Khoản", "12", <UserOutlined />),
+    getItem(<Link to="/users">Quản Lý Tài Khoản</Link>, "12", <UserOutlined />),
   ]),
 ];
 
