@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 
-import { Button, Popconfirm, Table, message } from "antd";
+import { Button, Input, Popconfirm, Table, message } from "antd";
 import Modalsp from "../Sp/modal_sp";
 import {
   EyeOutlined,
   EditOutlined,
   DeleteOutlined,
   PlusOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
+import "../../../css/SanPham.css";
 import axios from "axios";
 
 function Table_sp(props) {
@@ -15,6 +17,22 @@ function Table_sp(props) {
   const [Action, setAction] = useState();
   const [DSSanPham, setDSSanPham] = useState([]);
   const [DataEdit, setDataEdit] = useState();
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = () => {
+    if (searchText.trim() === "") {
+      // Nếu thanh tìm kiếm trống, hiển thị toàn bộ danh sách
+      getDSSanPham();
+    } else {
+      // Nếu có từ khóa tìm kiếm, thực hiện tìm kiếm và cập nhật filteredData
+      const filtered = DSSanPham.filter((item) =>
+        Object.values(item).some((value) =>
+          value.toString().toLowerCase().includes(searchText.toLowerCase())
+        )
+      );
+      setDSSanPham(filtered);
+    }
+  };
 
   function getDSSanPham() {
     axios
@@ -182,17 +200,43 @@ function Table_sp(props) {
 
   return (
     <div>
-      <Button
-        style={{
-          backgroundColor: "#1677ff",
-          color: "white",
-          marginBottom: "10px",
-        }}
-        onClick={showAdd}
-      >
-        <PlusOutlined />
-        Thêm mới sản phẩm
-      </Button>
+      <div className="headerSP">
+        <Button
+          style={{
+            backgroundColor: "#1677ff",
+            color: "white",
+            marginBottom: "10px",
+          }}
+          onClick={showAdd}
+        >
+          <PlusOutlined />
+          Thêm mới sản phẩm
+        </Button>
+        <div className="search">
+          <Input
+            placeholder="Tìm kiếm"
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{
+              width: "50%",
+              height: "100%",
+              display: "flex",
+              alignitems: "center",
+              justifyContent: "flexend",
+            }}
+          />
+          <Button
+            style={{
+              backgroundColor: "#1677ff",
+              color: "white",
+              marginLeft: "10px",
+            }}
+            onClick={handleSearch}
+          >
+            <SearchOutlined />
+            Tìm kiếm
+          </Button>
+        </div>
+      </div>
       <Table columns={columns} dataSource={DSSanPham} bordered />
       <Modalsp
         visible={Visible}

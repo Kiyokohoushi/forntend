@@ -1,9 +1,11 @@
 import { Form, Input, InputNumber, Modal, Select } from "antd";
-import React from "react";
+import {React, useState} from "react";
 import "../../../css/User.css";
 
 function ModalUser(props) {
   const [form] = Form.useForm();
+  const [UserName, setUserName] = useState();
+  const [Email, setEmail] = useState();
 
   return (
     <div>
@@ -25,18 +27,6 @@ function ModalUser(props) {
           </Form.Item>
           <Form.Item name="email" label="Email: ">
             <Input className="costumInput" />
-          </Form.Item>
-          <Form.Item name="vaitro" label="Vai trò: ">
-            <Select
-              style={{
-                width: "340px",
-                float: "right",
-              }}
-            >
-              <Select.Option value="Quản trị người dùng">Admin</Select.Option>
-              <Select.Option value="Người bán">Salesman</Select.Option>
-              <Select.Option value="Người mua">User</Select.Option>
-            </Select>
           </Form.Item>
           <Form.Item name="isActive" label="Trạng thái: ">
             <Select

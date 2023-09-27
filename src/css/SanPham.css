@@ -1,0 +1,11 @@
+.headerSP{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.search{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}

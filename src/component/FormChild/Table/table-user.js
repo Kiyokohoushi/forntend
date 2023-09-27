@@ -1,12 +1,33 @@
-import { Button, Table } from "antd";
-import React, { useState } from "react";
+import { Button, Switch, Table } from "antd";
+import React, { useEffect, useState } from "react";
 import ModalUser from "../Users/modal_user";
+import axios from "axios";
 
 function Table_user(props) {
     const [visible, setVisibleModal] = useState(false);
     const [action, setAction] = useState();
+    const [DSTaiKhoan, setDSTaiKhoan] = useState([]);
 
+    
 
+    async function getDSTaiKhoan() {
+      await axios.get("https://localhost:7177/api/TK/DanhSachTK?page=1")
+      .then((res)=>{
+        setDSTaiKhoan(res.data.data);
+        console.log(res.data.data);
+      }).catch((error)=>{
+        console.log(error);
+      })
+    }
+
+    useEffect(()=>{
+      getDSTaiKhoan();
+    },[]);
+
+    const switchChange = (check)=>{
+      if(DSTaiKhoan.isActive === 1){
+      }
+    }
 
     function showAdd(){
         setVisibleModal(true);
@@ -41,13 +62,10 @@ function Table_user(props) {
             key: "email",
         },
         {
-            title:"Vai trò",
-            align: "center",
-
-        },
-        {
             title: "Trạng thái",
-            dataIndex:""
+            dataIndex:"isActive",
+            key: "isActive",
+            render: Active
         },
         {
             title:"Thao tác",
@@ -56,6 +74,9 @@ function Table_user(props) {
     ]
     function thaotac(){
 
+    }
+    function Active(data){
+      
     }
   return (
     <div>
@@ -70,7 +91,7 @@ function Table_user(props) {
       >
         Tạo mới người dùng
       </Button>
-      <Table columns={columns}/>
+      <Table columns={columns} dataSource={DSTaiKhoan} bordered/>
       <ModalUser
       visible={visible}
       showAdd={showAdd}

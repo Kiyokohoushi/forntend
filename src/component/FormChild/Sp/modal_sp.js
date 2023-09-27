@@ -14,36 +14,51 @@ function Modal_sp(props) {
   const [LoaiSP, setLoaiSP] = useState();
   const [SoLuong, setSoLuong] = useState();
   const [DonGia, setDonGia] = useState();
+
   useEffect(() => {
     if (props.action === "Edit" || props.action === "ChiTiet") {
       axios
         .post("https://localhost:7177/api/SP/ChiTietSp?msp=" + id)
-        .then((res) => {
+        .then(async (res) => {
           console.log(res);
           const { mSanPham, tenSP, loaiSanPham, soLuong, donGia, picture } =
             res.data;
-          const data = res.data;
 
-          // Đặt giá trị ban đầu cho fileList
-          const initialFileList = [];
-          if (picture) {
-            initialFileList.push({
+          const response = await axios.get(
+            "https://localhost:7177/" + picture,
+            {
+              responseType: "arraybuffer",
+            }
+          );
+
+          const blob = new Blob([response.data], { type: "image/png" });
+          const imageFile = new File([blob], "image.png", {
+            type: "image/png",
+          });
+
+          const data = res.data;
+          const urlAnh = URL.createObjectURL(blob);
+
+          setFileList([
+            {
               uid: "-1",
               name: "image.png",
               status: "done",
-              url: `https://localhost:7177/${picture}`,
-            });
-          }
+              url: urlAnh,
+              thumbUrl: urlAnh,
+              originFileObj: imageFile, // Đặt đối tượng tệp tin ở đây
+            },
+          ]);
 
-          // Đặt giá trị cho các trường của form và fileList
+          // Đặt giá trị cho các trường khác trong biểu mẫu
           form.setFieldsValue({
+            picture: imageFile, // Đặt đối tượng tệp tin ở đây
             mSanPham,
             tenSP,
             loaiSanPham,
             donGia,
             soLuong,
           });
-          setFileList(initialFileList); // Đặt giá trị cho fileList
           setData(data);
         })
         .catch((error) => {
@@ -53,6 +68,10 @@ function Modal_sp(props) {
       form.resetFields();
     }
   }, [props.dataEdit]);
+
+  const fileListMoi = ({ fileList }) => {
+    setFileList(fileList);
+  };
 
   async function onSave() {
     if (props.action === "Add") {
@@ -70,7 +89,7 @@ function Modal_sp(props) {
     if (props.action === "Edit") {
       const dataEdit = await form.validateFields();
       const formData = new FormData();
-      formData.append("file",Anh);
+      formData.append("file", fileList[0].originFileObj || dataEdit.picture);
       formData.append("MSanPham", dataEdit.mSanPham);
       formData.append("TenSP", dataEdit.tenSP);
       formData.append("LoaiSanPham", dataEdit.loaiSanPham);
@@ -101,20 +120,7 @@ function Modal_sp(props) {
         >
           <Form form={form} layout="vertical" autoComplete="off">
             {props.action === "Edit" && (
-              <Form.Item
-                name="picture"
-                label="Hình ảnh"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng thêm ảnh",
-                  },
-                ]}
-                onChange={({ fileList: newFileList }) => {
-                  // Cập nhật trạng thái fileList khi người dùng tương tác với thành phần Upload
-                  setFileList(newFileList);
-                }}
-              >
+              <Form.Item name="picture" label="Hình ảnh">
                 <Upload
                   listType="picture"
                   accept=".png, .jpg, .gif, jpeg"
@@ -123,6 +129,7 @@ function Modal_sp(props) {
                     console.log({ file });
                     return false;
                   }}
+                  onChange={fileListMoi}
                 >
                   <Button icon={<UploadOutlined />}>Tải Lên</Button>
                 </Upload>
