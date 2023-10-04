@@ -12,9 +12,9 @@ import Login from "./component/FormMain/Account/Login/login";
 import Repass from "./component/FormMain/Account/Repass/repass";
 import Home from "./component/FormMain/Home/home";
 import SanPham from "./component/FormChild/Sp/SanPham";
-import XeCo from "./component/FormChild/LoaiSp/XeCo";
 import ThemSP from "./component/FormChild/ThemMoi/ThemSP";
 import User from "./component/FormChild/Users/TaiKhoan"
+import ChucNang from "./component/FormChild/ChucNang/ChucNang";
 
 const App = () => {
   const CheckLogin = () => {
@@ -22,8 +22,7 @@ const App = () => {
     const [IsLogin, setIsLogin] = useState();
 
     useEffect(() => {
-      let loginCheck = localStorage.getItem("LoginCT");
-      
+      let loginCheck = localStorage.getItem("Token");
         setIsLogin(loginCheck);
       
     }, [thisLocation]);
@@ -38,9 +37,9 @@ const App = () => {
         <Route element={<CheckLogin />}>
           <Route path="/" element={<Home />}>
             <Route path="sanpham" element={<SanPham />} />
-            <Route path="xeco" element={<XeCo />} />
             <Route path="themSP" element={<ThemSP />}/>
             <Route path="users" element={<User />}/>
+            <Route path="chucnang" element={<ChucNang />}/>
           </Route>
         </Route>
         <Route path="login" element={<Login />} />

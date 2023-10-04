@@ -1,5 +1,5 @@
 import { Form, Input, InputNumber, Modal, Select } from "antd";
-import {React, useState} from "react";
+import { React, useState } from "react";
 import "../../../css/User.css";
 
 function ModalUser(props) {
@@ -30,14 +30,26 @@ function ModalUser(props) {
           </Form.Item>
           <Form.Item name="isActive" label="Trạng thái: ">
             <Select
+            defaultValue={"1"}
               style={{
                 width: "340px",
                 float: "right",
               }}
-            >
-              <Select.Option value="1">Hoạt động</Select.Option>
-              <Select.Option value="0">Khóa</Select.Option>
-            </Select>
+              options={[
+                {
+                  value: "1",
+                  label: "Hoạt động",
+                },
+                {
+                  value: "0",
+                  label: "Tạm dừng",
+                },
+                {
+                  value: "-1",
+                  label: "Ngừng hoạt động",
+                },
+              ]}
+            />
           </Form.Item>
         </Form>
       </Modal>

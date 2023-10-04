@@ -18,62 +18,65 @@ function Login(props) {
   const navigate = useNavigate();
   const frmsdt = useRef(null);
   const frmpass = useRef(null);
-  
-  useEffect(()=> {
-    let loginCheck = localStorage.getItem("LoginCT");
+
+  useEffect(() => {
+    let loginCheck = localStorage.getItem("Token");
     setIsLogin(loginCheck);
-  },[pathname]);
+  }, [pathname]);
 
   async function onFinish() {
     const values = {
-      PhoneNumber:frmsdt.current.value,
+      PhoneNumber: frmsdt.current.value,
       Password: frmpass.current.value,
-    }
-    axios
-      .post("https://localhost:7177/api/TK/Login", values)
+    };
+    await axios
+      .post("https://localhost:7177/api/auth/login", values)
       .then((res) => {
-        console.log(res)
-        if(res.data.status===1) {
-          let loginCheckData ={
-            status: res.data.data.status,
-            data: res.data.data.data,
-          };
-          localStorage.setItem("LoginCT", JSON.stringify(loginCheckData));
+        console.log(res);
+        if (res.status === 200) {
+          localStorage.setItem("Token", res.data.token);
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${res.data.token}`;
           navigate("/");
-          console.log(res); 
-          message.success(res.data.messeage);
-      }
-         else {
-         message.error(res.data.messeage);
+          console.log(res);
+          message.success(res.data.message);
+        } else {
+          message.error(res.data.message);
         }
       })
       .catch((error) => {
-        message.error("Lỗi hệ thông vui lòng liện hệ hỗ trợ khách hàng",error);
+        message.error("Lỗi hệ thông vui lòng liện hệ hỗ trợ khách hàng", error);
       });
   }
 
-  return IsLogin? (
-    <Navigate to={"/"} replace/>
-  ):(
+  return IsLogin ? (
+    <Navigate to={"/"} replace />
+  ) : (
     <div className="Main-app">
       <Form className="form" onFinish={onFinish}>
         <div className="logo">
           <img src={logo} alt="Logo" width="121px" height="44px" />
         </div>
         <h1 className="text">Đăng Nhập</h1>
-       
-        <input type="number" ref={frmsdt} name="phoneNumber" placeholder="Số điện thoại" />
+
+        <input
+          type="number"
+          ref={frmsdt}
+          name="phoneNumber"
+          placeholder="Số điện thoại"
+        />
         <input
           type="password"
           name="password"
           ref={frmpass}
           placeholder="Mật khẩu"
         />
-       
+
         <Link to="/repass" className="link1">
           Quên mật khẩu
         </Link>
-        <button type="submit" className="Login" >
+        <button type="submit" className="Login">
           ĐĂNG NHẬP
         </button>
         <div className="content">

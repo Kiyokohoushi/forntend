@@ -11,7 +11,7 @@ function Home(props) {
   const navigate = useNavigate()
 
   function confirm() {
-    localStorage.removeItem("LoginCT");
+    localStorage.removeItem("Token");
       message.success("Đăng xuất thành công");
       navigate("/login");
   }

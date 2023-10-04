@@ -1,83 +1,111 @@
-import { Button, Switch, Table } from "antd";
+import { Button, Modal, Table, message } from "antd";
 import React, { useEffect, useState } from "react";
+import { EditOutlined, DeleteOutlined, WarningFilled } from "@ant-design/icons";
 import ModalUser from "../Users/modal_user";
 import axios from "axios";
 
 function Table_user(props) {
-    const [visible, setVisibleModal] = useState(false);
-    const [action, setAction] = useState();
-    const [DSTaiKhoan, setDSTaiKhoan] = useState([]);
+  const [visible, setVisibleModal] = useState(false);
+  const [action, setAction] = useState();
+  const [DSTaiKhoan, setDSTaiKhoan] = useState([]);
+  const { confirm } = Modal;
 
-    
-
-    async function getDSTaiKhoan() {
-      await axios.get("https://localhost:7177/api/TK/DanhSachTK?page=1")
-      .then((res)=>{
+  async function deleteTK(sdt){
+    await axios.delete("https://localhost:7177/api/TK/XoaTK?sdt="+sdt)
+    .then((res)=>{
+      console.log(res);
+      message.success(res.data.message);
+      getDSTaiKhoan();
+    }).catch((error)=>{
+      console.log(error);
+    });
+  }
+  async function getDSTaiKhoan() {
+    await axios
+      .get("https://localhost:7177/api/TK/DanhSachTK?page=1")
+      .then((res) => {
         setDSTaiKhoan(res.data.data);
         console.log(res.data.data);
-      }).catch((error)=>{
-        console.log(error);
       })
-    }
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-    useEffect(()=>{
-      getDSTaiKhoan();
-    },[]);
+  useEffect(() => {
+    getDSTaiKhoan();
+  }, []);
 
-    const switchChange = (check)=>{
-      if(DSTaiKhoan.isActive === 1){
-      }
-    }
+  function showAdd() {
+    setVisibleModal(true);
+    setAction("Add");
+  }
+  function showEdit() {
+    setVisibleModal(true);
+    setAction("Edit");
+  }
+  function showDelete(sdt) {
+    confirm({
+      title:"Bạn có muốn xóa dữ liệu của người dùng này không ?",
+      icon:<WarningFilled style={{color:"red"}}/>,
+      cancelText: "Không",
+      okText: "Có",
+      onOk(){
+        deleteTK(sdt);
+      },
+    });
+  }
+  function hiddenModal() {
+    setVisibleModal(false);
+  }
 
-    function showAdd(){
-        setVisibleModal(true);
-        setAction("Add");
-    }
-    function hiddenModal(){
-        setVisibleModal(false);
-    }
-
-    const columns = [
-        {
-            title:"STT",
-            align:"center",
-            render: (_,data,index)=>index+1,
-        },
-        {
-            title:"Tên hiển thị",
-            align : "center",
-            dataIndex: "username",
-            key: "username",
-        },
-        {
-            title:"Số điện thoại",
-            align : "center",
-            dataIndex: "phoneNumber",
-            key : "phoneNumber",
-        },
-        {
-            title:"Email",
-            align : "center",
-            dataIndex: "email",
-            key: "email",
-        },
-        {
-            title: "Trạng thái",
-            dataIndex:"isActive",
-            key: "isActive",
-            render: Active
-        },
-        {
-            title:"Thao tác",
-            render: thaotac
-        },
-    ]
-    function thaotac(){
-
-    }
-    function Active(data){
-      
-    }
+  const columns = [
+    {
+      title: "STT",
+      align: "center",
+      render: (_, data, index) => index + 1,
+    },
+    {
+      title: "Tên hiển thị",
+      align: "center",
+      dataIndex: "username",
+      key: "username",
+    },
+    {
+      title: "Số điện thoại",
+      align: "center",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Email",
+      align: "center",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Trạng thái",
+      align:"center",
+      dataIndex: "isActive",
+      key: "isActive",
+    },
+    {
+      align: "center",
+      title: "Thao tác",
+      render: thaotac,
+    },
+  ];
+  function thaotac(data) {
+    return (
+      <>
+      <EditOutlined
+          style={{ color: "#1677ff", marginLeft: "40px" }}
+          onClick={() => showEdit(data)}
+        />
+        <DeleteOutlined onClick={()=>showDelete(data.phoneNumber)} style={{ color: "#1677ff", marginLeft: "40px" }}/>
+      </>
+    );
+  }
   return (
     <div>
       <Button
@@ -91,14 +119,12 @@ function Table_user(props) {
       >
         Tạo mới người dùng
       </Button>
-      <Table columns={columns} dataSource={DSTaiKhoan} bordered/>
+      <Table columns={columns} dataSource={DSTaiKhoan} bordered />
       <ModalUser
-      visible={visible}
-      showAdd={showAdd}
-      hiddenModal={hiddenModal}
-      action={action}
-      >
-      </ModalUser>
+        visible={visible}
+        hiddenModal={hiddenModal}
+        action={action}
+      ></ModalUser>
     </div>
   );
 }

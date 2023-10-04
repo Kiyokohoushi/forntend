@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import {
-  AppstoreOutlined,
   ShopOutlined,
   SettingOutlined,
   PercentageOutlined,
   FormOutlined,
   CommentOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Link } from "react-router-dom";
@@ -23,22 +21,20 @@ const items = [
   getItem("Sản Phẩm", "sub1", <ShopOutlined />, [
     getItem(<Link to="/sanpham">Tất Cả Sản Phẩm</Link>, "1"),
   ]),
-  getItem("Loại Sản Phẩm", "sub2", <AppstoreOutlined />, [
-    getItem(<Link to="/xeco">Xe Cộ</Link>, "5"),
-    getItem("Đồ Điện Tử", "6"),
-    getItem("Nước Hoa", "7"),
-    getItem("Mỹ Phẩm", "8"),
+  getItem("Khuyến Mãi", "2", <PercentageOutlined />),
+  getItem(<Link to="/themSP">Thêm mới</Link>, "3", <FormOutlined />),
+  getItem("Trợ Giúp", "4", <CommentOutlined />),
+  getItem("Quản Trị Hệ Thống", "sub2", <SettingOutlined />, [
+    getItem(<Link to="/users">Quản Lý Người Dùng</Link>, "5"),
+    getItem(<Link to="/ChucNang">Quản Lý Chức Năng</Link>, "6"),
   ]),
-  getItem("Khuyến Mãi", "9", <PercentageOutlined />),
-  getItem(<Link to="/themSP">Thêm mới</Link>, "10", <FormOutlined />),
-  getItem("Trợ Giúp", "11", <CommentOutlined />),
-  getItem("Quản Trị Hệ Thống", "sub3", <SettingOutlined />, [
-    getItem(<Link to="/users">Quản Lý Tài Khoản</Link>, "12", <UserOutlined />),
-  ]),
+  getItem(<Link to="/QlKho">Quản Lý Kho</Link>),
+  getItem(<Link to="/PhieuKho">Phiếu Nhập Kho</Link>),
+
 ];
 
 // submenu keys of first level
-const rootSubmenuKeys = ["sub1", "sub2", "sub3"];
+const rootSubmenuKeys = ["sub1", "sub2"];
 const App = () => {
   const [openKeys, setOpenKeys] = useState(["sub1"]);
   const onOpenChange = (keys) => {

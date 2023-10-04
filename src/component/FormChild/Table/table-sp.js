@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button, Input, Popconfirm, Table, message } from "antd";
 import Modalsp from "../Sp/modal_sp";
@@ -17,12 +17,12 @@ function Table_sp(props) {
   const [Action, setAction] = useState();
   const [DSSanPham, setDSSanPham] = useState([]);
   const [DataEdit, setDataEdit] = useState();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   const handleSearch = () => {
     if (searchText.trim() === "") {
       // Nếu thanh tìm kiếm trống, hiển thị toàn bộ danh sách
-      getDSSanPham();
+      getDSSanPham(1);
     } else {
       // Nếu có từ khóa tìm kiếm, thực hiện tìm kiếm và cập nhật filteredData
       const filtered = DSSanPham.filter((item) =>
@@ -33,6 +33,11 @@ function Table_sp(props) {
       setDSSanPham(filtered);
     }
   };
+
+  useEffect(() => {
+    // Gọi hàm handleSearch khi searchText thay đổi
+    handleSearch();
+  }, [searchText]);
 
   function getDSSanPham() {
     axios
@@ -51,9 +56,9 @@ function Table_sp(props) {
       .then((res) => {
         if (res.data.status === 1) {
           console.log(res);
-          message.success(res.data.messeage);
+          message.success(res.data.message);
         } else {
-          message.error(res.data.messeage);
+          message.error(res.data.message);
         }
       })
       .catch((error) => {
@@ -61,6 +66,10 @@ function Table_sp(props) {
       });
   }
   async function suaSP(formData) {
+    axios.defaults.baseURL = "https://localhost:7177/api"; // Cài đặt base URL
+    axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*"; // Cho phép tất cả các nguồn
+    axios.defaults.headers.common["Access-Control-Allow-Headers"] =
+      "Origin, X-Requested-With, Content-Type, Accept";
     await axios
       .put("https://localhost:7177/api/SP/SuaSP", formData)
       .then((res) => {
@@ -104,7 +113,7 @@ function Table_sp(props) {
       .delete("https://localhost:7177/api/SP/XoaSP?msp=" + MSanPham)
       .then((res) => {
         if (res.data.data <= 1) {
-          message.success(res.data.messeage);
+          message.success(res.data.message);
           getDSSanPham();
         } else {
           message.error("Lỗi");

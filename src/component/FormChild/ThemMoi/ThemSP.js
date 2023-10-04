@@ -28,9 +28,9 @@ function ThemSP(props) {
       .then((res) => {
         if (res.data.status === 1) {
           console.log(res);
-          message.success(res.data.messeage);
+          message.success(res.data.message);
         } else {
-          message.error(res.data.messeage);
+          message.error(res.data.message);
         }
       })
       .catch((error) => {

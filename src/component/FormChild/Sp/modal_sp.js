@@ -69,7 +69,7 @@ function Modal_sp(props) {
     }
   }, [props.dataEdit]);
 
-  const fileListMoi = ({ fileList }) => {
+  const fileListMoi = ({fileList}) => {
     setFileList(fileList);
   };
 
@@ -89,7 +89,7 @@ function Modal_sp(props) {
     if (props.action === "Edit") {
       const dataEdit = await form.validateFields();
       const formData = new FormData();
-      formData.append("file", fileList[0].originFileObj || dataEdit.picture);
+      formData.append("file", fileList[0].originFileObj);
       formData.append("MSanPham", dataEdit.mSanPham);
       formData.append("TenSP", dataEdit.tenSP);
       formData.append("LoaiSanPham", dataEdit.loaiSanPham);
@@ -122,6 +122,7 @@ function Modal_sp(props) {
             {props.action === "Edit" && (
               <Form.Item name="picture" label="Hình ảnh">
                 <Upload
+                multiple
                   listType="picture"
                   accept=".png, .jpg, .gif, jpeg"
                   fileList={fileList} // Sử dụng fileList trong trạng thái ở đây

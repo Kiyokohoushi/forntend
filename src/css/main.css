@@ -38,20 +38,6 @@ input {
     margin-top: 14px;
     margin-bottom: 14px;
 }
-
-.ant-checkbox .ant-checkbox-inner {
-    min-width: 23px;
-    min-height: 23px;
-    border-color: #f4f4f4;
-}
-
-.ant-checkbox-checked .ant-checkbox-inner {
-    min-width: 23px;
-    min-height: 23px;
-    background-color: #FF8800;
-    border-color: #f4f4f4;
-}
-
 .text {
     text-align: left;
     text-decoration: none;
