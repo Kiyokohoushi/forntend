@@ -11,10 +11,12 @@ import Register from "./component/FormMain/Account/Register/register";
 import Login from "./component/FormMain/Account/Login/login";
 import Repass from "./component/FormMain/Account/Repass/repass";
 import Home from "./component/FormMain/Home/home";
-import SanPham from "./component/FormChild/Sp/SanPham";
+import SanPham from "./component/FormChild/Sp/QLSP/SanPham";
 import ThemSP from "./component/FormChild/ThemMoi/ThemSP";
-import User from "./component/FormChild/Users/TaiKhoan"
-import ChucNang from "./component/FormChild/ChucNang/ChucNang";
+import User from "./component/FormChild/QuanTri/Users/TaiKhoan"
+import ChucNang from "./component/FormChild/QuanTri/ChucNang/ChucNang";
+import QLKho from "./component/FormChild/Kho/QLKho/QLKho";
+import PhieuKho from "./component/FormChild/Kho/PhieuKho/PhieuKho";
 
 const App = () => {
   const CheckLogin = () => {
@@ -40,6 +42,8 @@ const App = () => {
             <Route path="themSP" element={<ThemSP />}/>
             <Route path="users" element={<User />}/>
             <Route path="chucnang" element={<ChucNang />}/>
+            <Route path="qlkho" element={<QLKho />}/>
+            <Route path="phieukho" element={<PhieuKho />}/>
           </Route>
         </Route>
         <Route path="login" element={<Login />} />

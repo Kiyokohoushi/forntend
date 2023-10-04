@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Button, Input, Popconfirm, Table, message } from "antd";
-import Modalsp from "../Sp/modal_sp";
+import Modalsp from "../Sp/QLSP/modal_sp";
 import {
   EyeOutlined,
   EditOutlined,

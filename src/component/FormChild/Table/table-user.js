@@ -1,7 +1,7 @@
 import { Button, Modal, Table, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { EditOutlined, DeleteOutlined, WarningFilled } from "@ant-design/icons";
-import ModalUser from "../Users/modal_user";
+import ModalUser from "../QuanTri/Users/modal_user";
 import axios from "axios";
 
 function Table_user(props) {

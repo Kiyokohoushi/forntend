@@ -1,0 +1,18 @@
+.headerPhieu {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.Search {
+    width: 25%;
+    margin-bottom: 10px;
+}
+
+.Search_QLKho {
+    width: 25%;
+    margin-bottom: 10px;
+}
+input {
+    height: 32px;
+}

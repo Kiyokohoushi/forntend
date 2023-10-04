@@ -1,5 +1,5 @@
 import React from "react";
-import Table from "../../FormChild/Table/table-sp";
+import Table from "../../../FormChild/Table/table-sp";
 import { Layout } from "antd";
 const { Content } = Layout;
 
