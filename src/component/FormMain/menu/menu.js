@@ -20,16 +20,17 @@ function getItem(label, key, icon, children, type) {
 const items = [
   getItem("Sản Phẩm", "sub1", <ShopOutlined />, [
     getItem(<Link to="/sanpham">Tất Cả Sản Phẩm</Link>, "1"),
+    getItem(<Link to="/loaiSP">Loại Sản Phẩm</Link>, "2"),
   ]),
-  getItem("Khuyến Mãi", "2", <PercentageOutlined />),
-  getItem(<Link to="/themSP">Thêm mới</Link>, "3", <FormOutlined />),
-  getItem("Trợ Giúp", "4", <CommentOutlined />),
+  getItem("Khuyến Mãi", "3", <PercentageOutlined />),
+  getItem(<Link to="/themSP">Thêm mới</Link>, "4", <FormOutlined />),
+  getItem("Trợ Giúp", "5", <CommentOutlined />),
   getItem("Quản Trị Hệ Thống", "sub2", <SettingOutlined />, [
-    getItem(<Link to="/users">Quản Lý Người Dùng</Link>, "5"),
-    getItem(<Link to="/ChucNang">Quản Lý Chức Năng</Link>, "6"),
+    getItem(<Link to="/users">Quản Lý Người Dùng</Link>, "6"),
+    getItem(<Link to="/ChucNang">Quản Lý Chức Năng</Link>, "7"),
   ]),
-  getItem(<Link to="/QlKho">Quản Lý Kho</Link>),
-  getItem(<Link to="/PhieuKho">Phiếu Nhập Kho</Link>),
+  getItem(<Link to="/QlKho">Quản Lý Kho</Link>,"8"),
+  getItem(<Link to="/PhieuKho">Phiếu Nhập Kho</Link>, "9"),
 
 ];
 

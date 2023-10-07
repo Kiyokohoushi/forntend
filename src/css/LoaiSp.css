@@ -1,0 +1,14 @@
+.header_LoaiSP {
+    margin: 0 0 10px 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Search_LoaiSP {
+    width: 25%;
+}
+.Button_LoaiSP {
+    width: 520px;
+    display: flex;
+    justify-content: flex-end;
+}

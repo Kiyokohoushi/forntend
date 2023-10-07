@@ -6,15 +6,10 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 const { Header, Sider, Content } = Layout;
 
-
 function Home(props) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const NameUser = localStorage.getItem("User");
 
-  function confirm() {
-    localStorage.removeItem("Token");
-      message.success("Đăng xuất thành công");
-      navigate("/login");
-  }
   return (
     <Layout>
       <Sider style={{ backgroundColor: "white" }}>
@@ -28,23 +23,17 @@ function Home(props) {
           <div className="title">
             <p>QUẢN LÝ HỆ THỐNG</p>
           </div>
-          <div className="avatar">
-            <Avatar icon={<UserOutlined />} />
-          </div>
-          <div className="avatar">
-            <input
-              value="Tên đăng nhập"
-              style={{ border: "0px", fontSize: "15px" }}
-              disabled
-            ></input>
-            <Popconfirm
-              title="Đăng xuất"
-              onConfirm={confirm}
-              okText="Đồng ý"
-              cancelText="Hủy"
-            >
-              <Button danger>Đăng xuất</Button>
-            </Popconfirm>
+          <div className="right_header">
+            <div>
+              <Avatar size={"large"} icon={<UserOutlined />} style={{marginRight:"10px"}} />
+            </div>
+            <div>
+              <input
+                value={NameUser}
+                style={{ border: "0px", fontSize: "15px" }}
+                disabled
+              ></input>
+            </div>
           </div>
         </Header>
         <Content className="Content">

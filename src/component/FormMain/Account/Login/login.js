@@ -35,14 +35,12 @@ function Login(props) {
         console.log(res);
         if (res.status === 200) {
           localStorage.setItem("Token", res.data.token);
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${res.data.token}`;
+          localStorage.setItem("User", res.data.username);
           navigate("/");
           console.log(res);
           message.success(res.data.message);
         } else {
-          message.error(res.data.message);
+          message.error(res);
         }
       })
       .catch((error) => {

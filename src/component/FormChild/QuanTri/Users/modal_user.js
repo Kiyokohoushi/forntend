@@ -18,7 +18,7 @@ function ModalUser(props) {
         open={props.visible}
         onCancel={props.hiddenModal}
       >
-        <Form form={form} autoComplete="false" className="formcustom">
+        <Form form={form} autoComplete="off" className="formcustom">
           <Form.Item name="username" label="Tên hiển thị: ">
             <Input className="costumInput" />
           </Form.Item>

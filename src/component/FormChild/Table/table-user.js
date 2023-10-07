@@ -9,6 +9,8 @@ function Table_user(props) {
   const [action, setAction] = useState();
   const [DSTaiKhoan, setDSTaiKhoan] = useState([]);
   const { confirm } = Modal;
+  const token = localStorage.getItem("Token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   async function deleteTK(sdt){
     await axios.delete("https://localhost:7177/api/TK/XoaTK?sdt="+sdt)

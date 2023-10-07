@@ -1,11 +1,14 @@
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Input, Table } from "antd";
-import React from "react";
+import React, { useState } from "react";
+import ModalNK from '../../FormChild/Kho/PhieuKho/modal_PhieuKho'
 import "../../../css/phieukho.css";
 
 const { Search } = Input;
 
-function table_PhieuKho(props) {
+function Table_PhieuKho(props) {
+  const [Show, setShow] = useState(false);
+  const [Action, setAction] = useState();
   const columns = [
     {
       title: "STT",
@@ -76,7 +79,17 @@ function table_PhieuKho(props) {
   function Thaotac() {
     return <di></di>;
   }
-
+  function ShowAdd() {
+    setShow(true);
+    setAction("Add");
+  }
+  function ShowEdit() {
+    setShow(true);
+    setAction("Edit");
+  }
+  function HiddenModal() {
+    setShow(false);
+  }
   return (
     <div>
       <div className="headerPhieu">
@@ -88,7 +101,7 @@ function table_PhieuKho(props) {
           <DatePicker style={{ height: "32px" }} placeholder="Đến ngày" />
         </div>
         <div className="Buttom">
-          <Button type="primary" style={{marginRight:"10px"}}>
+          <Button type="primary" style={{marginRight:"10px"}} onClick={ShowAdd}>
             <PlusOutlined />
             Tạo Phiếu Nhập
           </Button>
@@ -96,8 +109,13 @@ function table_PhieuKho(props) {
         </div>
       </div>
       <Table columns={columns} bordered />
+      <ModalNK
+        show={Show}
+        hiddenModal={HiddenModal}
+        action ={Action}
+      />
     </div>
   );
 }
 
-export default table_PhieuKho;
+export default Table_PhieuKho;

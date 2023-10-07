@@ -194,9 +194,6 @@ hr {
     height: max-content;
     width: 1060px;
 }
-
-.avatar {
+.right_header{
     display: flex;
-    justify-content: right;
-    margin: 20px 0px;
 }

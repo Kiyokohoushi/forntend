@@ -16,3 +16,7 @@
 input {
     height: 32px;
 }
+.costumInput{
+    width: 340px;
+    float: right;
+}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { Button, Input, Popconfirm, Table, message } from "antd";
 import Modalsp from "../Sp/QLSP/modal_sp";
 import {
@@ -18,6 +17,9 @@ function Table_sp(props) {
   const [DSSanPham, setDSSanPham] = useState([]);
   const [DataEdit, setDataEdit] = useState();
   const [searchText, setSearchText] = useState("");
+  const token = localStorage.getItem("Token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
 
   const handleSearch = () => {
     if (searchText.trim() === "") {
@@ -66,10 +68,6 @@ function Table_sp(props) {
       });
   }
   async function suaSP(formData) {
-    axios.defaults.baseURL = "https://localhost:7177/api"; // Cài đặt base URL
-    axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*"; // Cho phép tất cả các nguồn
-    axios.defaults.headers.common["Access-Control-Allow-Headers"] =
-      "Origin, X-Requested-With, Content-Type, Accept";
     await axios
       .put("https://localhost:7177/api/SP/SuaSP", formData)
       .then((res) => {
