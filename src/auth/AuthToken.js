@@ -22,6 +22,7 @@ function AuthLayout() {
           if (tokenExp < currentTime) {
             // Token đã hết hạn, đăng xuất người dùng và xóa token
             localStorage.removeItem("Token");
+            localStorage.removeItem("User");
             setIsLogin(false);
             navigate("/login"); // Chuyển hướng đến trang đăng nhập
           }
@@ -29,6 +30,7 @@ function AuthLayout() {
           console.error("Lỗi giải mã token:", error);
           // Xảy ra lỗi khi giải mã token, xử lý đăng xuất người dùng và xóa token
           localStorage.removeItem("Token");
+          localStorage.removeItem("User");
           setIsLogin(false);
           navigate("/login"); // Chuyển hướng đến trang đăng nhập
         }

@@ -24,7 +24,7 @@ function Table_user(props) {
   }
   async function getDSTaiKhoan() {
     await axios
-      .get("https://localhost:7177/api/TK/DanhSachTK?page=1")
+      .get("https://localhost:7177/api/TK/admin/DanhSachTK?page=1")
       .then((res) => {
         setDSTaiKhoan(res.data.data);
         console.log(res.data.data);
@@ -48,7 +48,8 @@ function Table_user(props) {
   }
   function showDelete(sdt) {
     confirm({
-      title:"Bạn có muốn xóa dữ liệu của người dùng này không ?",
+      centered: true,
+      title:<p style={{color:"red"}}>Bạn có muốn xóa dữ liệu của người dùng này không ?</p>,
       icon:<WarningFilled style={{color:"red"}}/>,
       cancelText: "Không",
       okText: "Có",

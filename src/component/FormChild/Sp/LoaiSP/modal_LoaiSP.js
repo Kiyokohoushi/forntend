@@ -8,20 +8,13 @@ function Modal_LoaiSP(props) {
   return (
     <div>
       <Modal
-        title={
-          props.action === "Add"
-            ? "Thêm mới"
-            : props.action === "Edit"
-            ? "Cập nhật"
-            : " Xóa"
-        }
+        title={props.action === "Add" ? "Thêm mới" : "Cập nhật"}
         open={props.show}
         onCancel={props.hidden}
-        footer={
-          props.action === "Add" || props.action === "Edit"
-            ? [<Button type="primary">Cập nhật</Button>, <Button onClick={props.hidden}>Hủy</Button>]
-            : [<Button type="primary">Xóa</Button>, <Button onClick={props.hidden}>Hủy</Button>]
-        }
+        footer={[
+          <Button type="primary">Cập nhật</Button>,
+          <Button onClick={props.hidden}>Hủy</Button>,
+        ]}
       >
         {props.action === "Add" ? (
           <Form form={form} layout="horizontal" autoComplete="off">
@@ -53,32 +46,25 @@ function Modal_LoaiSP(props) {
             </Form.Item>
           </Form>
         ) : (
-          props.action === "Edit" && (
-            <Form form={form} layout="horizontal" autoComplete="off">
-              <Form.Item label="Loại sản phẩm">
-                <Input disabled />
-              </Form.Item>
+          <Form form={form} layout="horizontal" autoComplete="off">
+            <Form.Item label="Loại sản phẩm">
+              <Input disabled />
+            </Form.Item>
 
-              <Form.Item label={"Loại trạng thái :"}>
-                <Select
-                  options={[
-                    {
-                      value: "Đang kinh doanh",
-                      label: "Đang kinh doanh",
-                    },
-                    {
-                      value: "Ngừng kinh doanh",
-                      label: "Ngừng khinh doanh",
-                    },
-                  ]}
-                />
-              </Form.Item>
-            </Form>
-          )
-        )}
-        {props.action === "Delete" && (
-          <Form form={form}>
-            <Content>Bạn có chắc muốn xóa không ?</Content>
+            <Form.Item label={"Loại trạng thái :"}>
+              <Select
+                options={[
+                  {
+                    value: "Đang kinh doanh",
+                    label: "Đang kinh doanh",
+                  },
+                  {
+                    value: "Ngừng kinh doanh",
+                    label: "Ngừng khinh doanh",
+                  },
+                ]}
+              />
+            </Form.Item>
           </Form>
         )}
       </Modal>

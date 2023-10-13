@@ -20,25 +20,22 @@ function Table_sp(props) {
   const token = localStorage.getItem("Token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-
   const handleSearch = () => {
-    if (searchText.trim() === "") {
-      // Nếu thanh tìm kiếm trống, hiển thị toàn bộ danh sách
-      getDSSanPham(1);
-    } else {
-      // Nếu có từ khóa tìm kiếm, thực hiện tìm kiếm và cập nhật filteredData
-      const filtered = DSSanPham.filter((item) =>
-        Object.values(item).some((value) =>
-          value.toString().toLowerCase().includes(searchText.toLowerCase())
-        )
-      );
-      setDSSanPham(filtered);
-    }
+    
   };
 
   useEffect(() => {
     // Gọi hàm handleSearch khi searchText thay đổi
-    handleSearch();
+    if (searchText.trim() === "") {
+      // Nếu thanh tìm kiếm trống, hiển thị toàn bộ danh sách
+      getDSSanPham(1);
+    } else {
+      const regex = new RegExp(`^${searchText}`, 'i');
+      const filtered = DSSanPham.filter((item) =>
+        regex.test(item.tenSP)
+      );
+      setDSSanPham(filtered);
+    }
   }, [searchText]);
 
   function getDSSanPham() {

@@ -1,7 +1,7 @@
-import { Table, Input, Button, Space } from "antd";
+import { Table, Input, Button, Space, Modal } from "antd";
 import "../../../css/LoaiSp.css";
 import React, { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, WarningFilled } from "@ant-design/icons";
 import ModalLoaiSP from "../Sp/LoaiSP/modal_LoaiSP";
 import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 
@@ -10,6 +10,7 @@ const { Search } = Input;
 function Table_LSP(props) {
   const [Show, setShow] = useState(false);
   const [Action, setAction] = useState();
+  const { confirm } = Modal;
 
   const columns = [
     {
@@ -45,8 +46,8 @@ function Table_LSP(props) {
     return (
       <div>
         <Space direction="horizontal" size={20}>
-          <EditOutlined onClick={()=>ShowEdit(data)} />
-          <DeleteOutline onClick={()=>ShowDelete(data)} />
+          <EditOutlined onClick={() => ShowEdit(data)} />
+          <DeleteOutline onClick={() => ShowDelete(data)} />
         </Space>
       </div>
     );
@@ -61,8 +62,15 @@ function Table_LSP(props) {
     setAction("Edit");
   }
   function ShowDelete() {
-    setShow(true);
-    setAction("Delete");
+    confirm({
+      centered: true,
+      title: (
+        <p style={{ color: "red" }}>Bạn có muốn xóa không ?</p>
+      ),
+      icon: <WarningFilled style={{ color: "red" }} />,
+      cancelText: "Không",
+      okText: "Có",
+    });
   }
   function HiddenShow() {
     setShow(false);
