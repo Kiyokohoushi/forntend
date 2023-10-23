@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { decodeJwt } from "jose";
 import React, { useEffect, useState } from "react";
 import { useLocation, Navigate, useNavigate, Outlet } from "react-router-dom";
@@ -20,9 +21,10 @@ function AuthLayout() {
           const currentTime = Date.now();
 
           if (tokenExp < currentTime) {
-            // Token đã hết hạn, đăng xuất người dùng và xóa token
+            //Token đã hết hạn, đăng xuất người dùng và xóa token
             localStorage.removeItem("Token");
             localStorage.removeItem("User");
+            message.error("Hết thời hạn đăng nhập")
             setIsLogin(false);
             navigate("/login"); // Chuyển hướng đến trang đăng nhập
           }

@@ -16,7 +16,7 @@ function Table_user(props) {
     await axios.delete("https://localhost:7177/api/TK/XoaTK?sdt="+sdt)
     .then((res)=>{
       console.log(res);
-      message.success(res.data.message);
+      message.success(res.data.Message);
       getDSTaiKhoan();
     }).catch((error)=>{
       console.log(error);
@@ -26,8 +26,8 @@ function Table_user(props) {
     await axios
       .get("https://localhost:7177/api/TK/admin/DanhSachTK?page=1")
       .then((res) => {
-        setDSTaiKhoan(res.data.data);
-        console.log(res.data.data);
+        setDSTaiKhoan(res.data.Data);
+        console.log(res.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -71,20 +71,20 @@ function Table_user(props) {
     {
       title: "Tên hiển thị",
       align: "center",
-      dataIndex: "username",
-      key: "username",
+      dataIndex: "Username",
+      key: "Username",
     },
     {
       title: "Số điện thoại",
       align: "center",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
+      dataIndex: "PhoneNumber",
+      key: "PhoneNumber",
     },
     {
       title: "Email",
       align: "center",
-      dataIndex: "email",
-      key: "email",
+      dataIndex: "Email",
+      key: "Email",
     },
     {
       title: "Trạng thái",
@@ -105,7 +105,7 @@ function Table_user(props) {
           style={{ color: "#1677ff", marginLeft: "40px" }}
           onClick={() => showEdit(data)}
         />
-        <DeleteOutlined onClick={()=>showDelete(data.phoneNumber)} style={{ color: "#1677ff", marginLeft: "40px" }}/>
+        <DeleteOutlined onClick={()=>showDelete(data.PhoneNumber)} style={{ color: "#1677ff", marginLeft: "40px" }}/>
       </>
     );
   }

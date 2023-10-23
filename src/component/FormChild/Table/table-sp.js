@@ -20,9 +20,7 @@ function Table_sp(props) {
   const token = localStorage.getItem("Token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-  const handleSearch = () => {
-    
-  };
+  const handleSearch = () => {};
 
   useEffect(() => {
     // Gọi hàm handleSearch khi searchText thay đổi
@@ -30,10 +28,8 @@ function Table_sp(props) {
       // Nếu thanh tìm kiếm trống, hiển thị toàn bộ danh sách
       getDSSanPham(1);
     } else {
-      const regex = new RegExp(`^${searchText}`, 'i');
-      const filtered = DSSanPham.filter((item) =>
-        regex.test(item.tenSP)
-      );
+      const regex = new RegExp(`^${searchText}`, "i");
+      const filtered = DSSanPham.filter((item) => regex.test(item.TenSP));
       setDSSanPham(filtered);
     }
   }, [searchText]);
@@ -42,8 +38,8 @@ function Table_sp(props) {
     axios
       .get("https://localhost:7177/api/SP/DanhSachSP?page=1")
       .then((res) => {
-        setDSSanPham(res.data.data);
-        console.log(res.data.data);
+        setDSSanPham(res.data.Data);
+        console.log(res.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -53,11 +49,11 @@ function Table_sp(props) {
     await axios
       .post("https://localhost:7177/api/SP/ThemSP", formData)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.Status === 1) {
           console.log(res);
-          message.success(res.data.message);
+          message.success(res.data.Message);
         } else {
-          message.error(res.data.message);
+          message.error(res.data.Message);
         }
       })
       .catch((error) => {
@@ -68,11 +64,11 @@ function Table_sp(props) {
     await axios
       .put("https://localhost:7177/api/SP/SuaSP", formData)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.Status === 1) {
           console.log(res);
-          message.success(res.data.messeage);
+          message.success(res.data.Message);
         } else {
-          message.error(res.data.messeage);
+          message.error(res.data.Message);
         }
       })
       .catch((error) => {
@@ -107,8 +103,8 @@ function Table_sp(props) {
     axios
       .delete("https://localhost:7177/api/SP/XoaSP?msp=" + MSanPham)
       .then((res) => {
-        if (res.data.data <= 1) {
-          message.success(res.data.message);
+        if (res.data.Data <= 1) {
+          message.success(res.data.Message);
           getDSSanPham();
         } else {
           message.error("Lỗi");
@@ -140,7 +136,7 @@ function Table_sp(props) {
         />
         <Popconfirm
           title="Bạn có chắc muốn xóa?"
-          onConfirm={() => deleteSanPham(data.mSanPham)}
+          onConfirm={() => deleteSanPham(data.MSanPham)}
           okText="Đồng ý"
           cancelText="Hủy"
         >
@@ -158,9 +154,9 @@ function Table_sp(props) {
     },
     {
       title: "Hình Ảnh",
-      dataIndex: "picture",
+      dataIndex: "Picture",
       align: "center",
-      key: "picture",
+      key: "Picture",
       render: (hinhanh) => (
         <img
           src={hinhanh}
@@ -172,32 +168,32 @@ function Table_sp(props) {
     {
       title: "Mã Sản Phẩm",
       align: "center",
-      dataIndex: "mSanPham",
-      key: "mSanPham",
+      dataIndex: "MSanPham",
+      key: "MSanPham",
     },
     {
       title: "Tên Sản Phẩm",
       align: "center",
-      dataIndex: "tenSP",
-      key: "tenSP",
+      dataIndex: "TenSP",
+      key: "TenSP",
     },
     {
       title: "Loại Sản Phẩm",
       align: "center",
-      dataIndex: "loaiSanPham",
-      key: "loaiSanPham",
+      dataIndex: "LoaiSanPham",
+      key: "LoaiSanPham",
     },
     {
       title: "Giá",
       align: "center",
-      dataIndex: "donGia",
-      key: "donGia",
+      dataIndex: "DonGia",
+      key: "DonGia",
     },
     {
       title: "Số Lượng",
       align: "center",
-      dataIndex: "soLuong",
-      key: "soLuong",
+      dataIndex: "SoLuong",
+      key: "SoLuong",
     },
     { title: "Thao tác", align: "center", render: thaotac },
   ];

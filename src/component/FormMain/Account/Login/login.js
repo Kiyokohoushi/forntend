@@ -34,11 +34,11 @@ function Login(props) {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          localStorage.setItem("Token", res.data.token);
-          localStorage.setItem("User", res.data.username);
+          localStorage.setItem("Token", res.data.Token);
+          localStorage.setItem("User", res.data.Username);
           navigate("/");
           console.log(res);
-          message.success(res.data.message);
+          message.success(res.data.Message);
         } else {
           message.error(res);
         }

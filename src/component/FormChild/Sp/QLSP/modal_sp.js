@@ -5,7 +5,7 @@ import axios from "axios";
 
 function Modal_sp(props) {
   const [form] = Form.useForm();
-  const id = props.dataEdit && props.dataEdit.mSanPham;
+  const id = props.dataEdit && props.dataEdit.MSanPham;
   const [Data, setData] = useState();
   const [fileList, setFileList] = useState([]); // Thêm trạng thái fileList
   const [Anh, setAnh] = useState();
@@ -15,21 +15,19 @@ function Modal_sp(props) {
   const [SoLuong, setSoLuong] = useState();
   const [DonGia, setDonGia] = useState();
 
+
   useEffect(() => {
     if (props.action === "Edit" || props.action === "ChiTiet") {
       axios
         .post("https://localhost:7177/api/SP/ChiTietSp?msp=" + id)
         .then(async (res) => {
           console.log(res);
-          const { mSanPham, tenSP, loaiSanPham, soLuong, donGia, picture } =
+          const { MSanPham, TenSP, LoaiSanPham, SoLuong, DonGia, Picture } =
             res.data;
 
-          const response = await axios.get(
-            "https://localhost:7177/" + picture,
-            {
-              responseType: "arraybuffer",
-            }
-          );
+          const response = await axios.get("https://localhost:7177" + Picture, {
+            responseType: "arraybuffer",
+          });
 
           const blob = new Blob([response.data], { type: "image/png" });
           const imageFile = new File([blob], "image.png", {
@@ -52,12 +50,12 @@ function Modal_sp(props) {
 
           // Đặt giá trị cho các trường khác trong biểu mẫu
           form.setFieldsValue({
-            picture: imageFile, // Đặt đối tượng tệp tin ở đây
-            mSanPham,
-            tenSP,
-            loaiSanPham,
-            donGia,
-            soLuong,
+            Picture: imageFile, // Đặt đối tượng tệp tin ở đây
+            MSanPham,
+            TenSP,
+            LoaiSanPham,
+            DonGia,
+            SoLuong,
           });
           setData(data);
         })
@@ -69,7 +67,7 @@ function Modal_sp(props) {
     }
   }, [props.dataEdit]);
 
-  const fileListMoi = ({fileList}) => {
+  const fileListMoi = ({ fileList }) => {
     setFileList(fileList);
   };
 
@@ -90,11 +88,11 @@ function Modal_sp(props) {
       const dataEdit = await form.validateFields();
       const formData = new FormData();
       formData.append("file", fileList[0].originFileObj);
-      formData.append("MSanPham", dataEdit.mSanPham);
-      formData.append("TenSP", dataEdit.tenSP);
-      formData.append("LoaiSanPham", dataEdit.loaiSanPham);
-      formData.append("SoLuong", dataEdit.soLuong);
-      formData.append("DonGia", dataEdit.donGia);
+      formData.append("MSanPham", dataEdit.MSanPham);
+      formData.append("TenSP", dataEdit.TenSP);
+      formData.append("LoaiSanPham", dataEdit.LoaiSanPham);
+      formData.append("SoLuong", dataEdit.SoLuong);
+      formData.append("DonGia", dataEdit.DonGia);
       await props.save(formData);
     }
   }
@@ -122,9 +120,10 @@ function Modal_sp(props) {
             {props.action === "Edit" && (
               <Form.Item name="picture" label="Hình ảnh">
                 <Upload
-                multiple
+                  multiple
                   listType="picture"
                   accept=".png, .jpg, .gif, jpeg"
+                  maxCount={1}
                   fileList={fileList} // Sử dụng fileList trong trạng thái ở đây
                   beforeUpload={(file) => {
                     console.log({ file });
@@ -138,7 +137,7 @@ function Modal_sp(props) {
             )}
             {props.action === "Add" && (
               <Form.Item
-                name="picture"
+                name="Picture"
                 label="Hình ảnh"
                 rules={[
                   {
@@ -153,6 +152,7 @@ function Modal_sp(props) {
                 <Upload
                   listType="picture"
                   accept=".png, .jpg, .gif, jpeg"
+                  maxCount={1}
                   beforeUpload={(file) => {
                     console.log({ file });
                     return false;
@@ -164,7 +164,7 @@ function Modal_sp(props) {
             )}
 
             <Form.Item
-              name="mSanPham"
+              name="MSanPham"
               label="Mã Sản Phẩm"
               rules={[
                 {
@@ -179,7 +179,7 @@ function Modal_sp(props) {
               <Input />
             </Form.Item>
             <Form.Item
-              name="tenSP"
+              name="TenSP"
               label="Tên Sản Phẩm"
               rules={[
                 {
@@ -194,7 +194,7 @@ function Modal_sp(props) {
               <Input />
             </Form.Item>
             <Form.Item
-              name="loaiSanPham"
+              name="LoaiSanPham"
               label="Loại Sản Phẩm"
               rules={[
                 {
@@ -210,7 +210,7 @@ function Modal_sp(props) {
             </Form.Item>
 
             <Form.Item
-              name="donGia"
+              name="DonGia"
               label="Giá"
               rules={[
                 {
@@ -225,7 +225,7 @@ function Modal_sp(props) {
               <InputNumber />
             </Form.Item>
             <Form.Item
-              name="soLuong"
+              name="SoLuong"
               label="Số Lượng"
               required
               messageVariables={"Vui lòng nhập số lượng"}
@@ -256,30 +256,30 @@ function Modal_sp(props) {
             <tbody>
               <tr>
                 <td rowspan="6" width="200" height="205">
-                  {Data && Data.picture && (
+                  {Data && Data.Picture && (
                     <img
                       height="205"
                       width="200"
-                      src={"https://localhost:7177/" + Data.picture}
+                      src={"https://localhost:7177/" + Data.Picture}
                       alt="Ảnh sản phẩm"
                     />
                   )}
                 </td>
               </tr>
               <tr>
-                <td>Mã sản phẩm: {Data && Data.mSanPham} </td>
+                <td>Mã sản phẩm: {Data && Data.MSanPham} </td>
               </tr>
               <tr>
-                <td>Tên sản phẩm: {Data && Data.tenSP} </td>
+                <td>Tên sản phẩm: {Data && Data.TenSP} </td>
               </tr>
               <tr>
-                <td>Loại sản phẩm: {Data && Data.loaiSanPham} </td>
+                <td>Loại sản phẩm: {Data && Data.LoaiSanPham} </td>
               </tr>
               <tr>
-                <td>Giá: {Data && Data.donGia} </td>
+                <td>Giá: {Data && Data.DonGia} </td>
               </tr>
               <tr>
-                <td>Số lượng: {Data && Data.soLuong} </td>
+                <td>Số lượng: {Data && Data.SoLuong} </td>
               </tr>
             </tbody>
           </table>

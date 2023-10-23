@@ -21,7 +21,7 @@ function Register() {
 
   async function onFinish() {
     const values = {
-      email: frmemail.current.value,
+      Email: frmemail.current.value,
       Name: frmName.current.value,
       PhoneNumber: frmNumber.current.value,
       Password: frmPassword.current.value,
@@ -29,12 +29,12 @@ function Register() {
     axios
       .post("https://localhost:7177/api/TK/Register", values,)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.Status === 1) {
           navigate("/")
           console.log(res);
-          message.success(res.data.message);
+          message.success(res.data.Message);
         } else {
-          message.error(res.data.message);
+          message.error(res.data.Message);
         }
       })
       .catch((error) => {
