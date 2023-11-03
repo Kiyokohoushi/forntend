@@ -1,4 +1,4 @@
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { FileAddOutlined } from "@ant-design/icons";
 import { Button, Card, Checkbox, List, Select, Space, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -13,20 +13,13 @@ function SettingCN(props) {
   const [dataND, setDataND] = useState([]);
   const [dataUser, setDataUser] = useState([]);
   const [dataChucNangNND, setDataChucNangNND] = useState([]);
-  const [DSChucNang, setDSChucNang] = useState([]);
   const dataNND = props.Data;
   const token = localStorage.getItem("Token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  const [checkboxStates, setCheckboxStates] = useState({}); // Mảng trạng thái checkbox
 
-  const [Xem, setXem] = useState(false);
-  const [Them, setThem] = useState(false);
-  const [Sua, setSua] = useState(false);
-  const [Xoa, setXoa] = useState(false);
-
-  const [idCNNND, setIdCNNND] = useState();
-  const [IdCN, setIdChuCNang] = useState();
   const [IdUser, setUser] = useState("");
-  const [idChucNang, setIdCN] = useState("");
+  const [Disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     //Account
@@ -35,8 +28,6 @@ function SettingCN(props) {
     getDSChucNangNND();
     //DSNguoiDungNND
     getDSUserNND();
-    //DS ChucNang
-    getDSChucNang();
   }, []);
 
   //Danh sách người dùng trong nhóm người dùng
@@ -110,12 +101,24 @@ function SettingCN(props) {
       .get("https://localhost:7177/api/ChucNangCuaNND/DanhSachCNCuaNND2?page=1")
       .then((res) => {
         const DataDDSCN = res.data.Data;
-
         const LocTen = DataDDSCN.filter(
           (data) => data.TenNND === dataNND.TenNND
         );
 
+        // Khởi tạo trạng thái checkbox từ dữ liệu item
+        const checkboxStates = {};
+        LocTen.forEach((item) => {
+          checkboxStates[item.idChucNangCuaNND] = {
+            Xem: item.Xem,
+            Sua: item.Sua,
+            Xoa: item.Xoa,
+            Them: item.Them,
+          };
+          console.log(checkboxStates);
+        });
+
         setDataChucNangNND(LocTen);
+        setCheckboxStates(checkboxStates);
       })
       .catch((err) => {
         console.error(err);
@@ -123,17 +126,11 @@ function SettingCN(props) {
   }
 
   //Thêm mới chức năng của nhóm người dùng
-  function ThemMoiChucNangNND(id) {
-    setIdCN(id);
-    console.log(id);
-    let DataCNNND = {
-      ChucNang: id,
-      NNDID: dataNND.NNDID,
-    };
+  function ThemMoiChucNangNND(formData) {
     axios
       .post(
         "https://localhost:7177/api/ChucNangCuaNND/ThemChucNangCuaNND",
-        DataCNNND
+        formData
       )
       .then((res) => {
         if (res.data.Status === 1) {
@@ -167,75 +164,45 @@ function SettingCN(props) {
 
   //Sửa chức năng
   function UpdateCNNND() {
-    let newData = {
-      idChucNangCuaNND: idCNNND,
-      ChucNang: IdCN,
-      NNDID: dataNND.NNDID,
-      Xem: Xem,
-      Them: Them,
-      Sua: Sua,
-      Xoa: Xoa,
-    };
-    axios
-      .put("https://localhost:7177/api/ChucNangCuaNND/SuaCNCN", newData)
-      .then((res) => {
-        if (res.data.Status === 1) {
-          message.success(res.data.Message);
-        } else {
-          message.error(res.data.Message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dataChucNangNND.forEach((item) => {
+      const newData = {
+        idChucNangCuaNND: item.idChucNangCuaNND,
+        ChucNang: item.ChungNangid,
+        NNDID: item.NNDID,
+        Xem: checkboxStates[item.idChucNangCuaNND]?.Xem || false,
+        Them: checkboxStates[item.idChucNangCuaNND]?.Them || false,
+        Sua: checkboxStates[item.idChucNangCuaNND]?.Sua || false,
+        Xoa: checkboxStates[item.idChucNangCuaNND]?.Xoa || false,
+      };
+      console.log(newData)
+      axios
+        .put("https://localhost:7177/api/ChucNangCuaNND/SuaCNCN",newData)
+        .then((res) => {
+          if (res.data.Status === 1) {
+            message.success(res.data.Message);
+            setDisabled(true);
+          } else {
+            message.error(res.data.Message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   }
 
-  //CheckBox và tìm kiếm chức năng nhóm người dùng
-  function ThayDoiNND(idcnnnd) {
-    axios
-      .post(
-        "https://localhost:7177/api/ChucNangCuaNND/ChiTietCNCNND?id=" + idcnnnd
-      )
-      .then((response) => {
-        const dataCN = response.data;
-        console.log(dataCN);
-
-        setIdChuCNang(dataCN.ChungNangid);
-        setIdCNNND(dataCN.idChucNangCuaNND);
-        setThem(dataCN.Them);
-        setSua(dataCN.Sua);
-        setXoa(dataCN.Xoa);
-        setXem(dataCN.Xem);
-      });
-  }
-
-  //Danh sách chức năng
-  function getDSChucNang() {
-    axios
-      .get("https://localhost:7177/api/ChucNang/DSChucNang?page=1")
-      .then((res) => {
-        setDSChucNang(res.data.Data);
-      });
-  }
-
-  //Thêm mới chức năng
-  function ThemMoiCN(formData) {
-    axios
-      .post(
-        "https://localhost:7177/api/ChucNang/ThemChucNang?namecn=" + formData
-      )
-      .then((res) => {
-        if (res.data.Status === 1) {
-          message.success(res.data.Message);
-          getDSChucNang();
-        } else {
-          message.error(res.data.Message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  // Hàm xử lý thay đổi trạng thái checkbox cho một idChucNang cụ thể
+  // Hàm xử lý thay đổi trạng thái checkbox cho một idChucNang cụ thể
+  const handleCheckboxChange = (idChucNangCuaNND, key, value) => {
+    setDisabled(false);
+    setCheckboxStates((prevState) => ({
+      ...prevState,
+      [idChucNangCuaNND]: {
+        ...prevState[idChucNangCuaNND],
+        [key]: value,
+      },
+    }));
+  };
 
   //Danh sách người dùng
   function getDSUser() {
@@ -252,7 +219,7 @@ function SettingCN(props) {
   //Xử lý acction
   async function onSave(formData) {
     if (Action === "AddCN") {
-      await ThemMoiCN(formData);
+      await ThemMoiChucNangNND(formData);
     }
   }
   function ShowAddCN() {
@@ -315,57 +282,30 @@ function SettingCN(props) {
               </div>
             </Space>
           </Card>
-          <Card title="THÊM CHỨC NĂNG" style={{ width: "637px" }}>
+          <Card
+            title="THÊM CHỨC NĂNG"
+            style={{ width: "637px", minHeight: "450px" }}
+          >
             <Space direction="vertical" size={20}>
-              <Button type="primary" onClick={ShowAddCN}>
-                <PlusOutlined />
-                Thêm chức năng
-              </Button>
-              <Select
-                placeholder={"Chọn hoặc thêm chức năng"}
-                style={{ width: "580px" }}
-                value={idChucNang}
-                onChange={(value) => ThemMoiChucNangNND(value)}
+              <Space
+                direction="horizontal"
+                size={10}
+                style={{ float: "right" }}
               >
-                {DSChucNang.map((itemCN) => (
-                  <option key={itemCN.ChucNangid} value={itemCN.ChucNangid}>
-                    {itemCN.TenChucNang}
-                  </option>
-                ))}
-              </Select>
-              <Space direction="horizontal" size={70}>
-                <Checkbox
-                  checked={Xem}
-                  onChange={(e) => setXem(e.target.checked)}
-                >
-                  Xem
-                </Checkbox>
-                <Checkbox
-                  checked={Sua}
-                  onChange={(e) => setSua(e.target.checked)}
-                >
-                  Sửa
-                </Checkbox>
-                <Checkbox
-                  checked={Xoa}
-                  onChange={(e) => setXoa(e.target.checked)}
-                >
-                  Xóa
-                </Checkbox>
-                <Checkbox
-                  checked={Them}
-                  onChange={(e) => setThem(e.target.checked)}
-                >
-                  Thêm
-                </Checkbox>
-                <Button onClick={UpdateCNNND}>Lưu</Button>
+                <Button disabled={Disabled} onClick={UpdateCNNND}>
+                  <FileAddOutlined /> Lưu
+                </Button>
+                <Button type="primary" onClick={ShowAddCN}>
+                  <FileAddOutlined />
+                  Thêm chức năng
+                </Button>
               </Space>
               <div
                 style={{
-                  height: 200,
+                  height: 300,
+                  width: 600,
                   overflow: "auto",
                   padding: "0 16px",
-                  border: "1px solid rgba(140, 140, 140, 0.35)",
                 }}
               >
                 <InfiniteScroll dataLength={dataChucNangNND.length}>
@@ -375,13 +315,66 @@ function SettingCN(props) {
                       <List.Item
                         key={item.idChucNangCuaNND}
                         value={item.idChucNangCuaNND}
-                        onClick={() => ThayDoiNND(item.idChucNangCuaNND)}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
                       >
                         {item.TenChucNang}
-                        <DeleteOutlined
-                          style={{ float: "right" }}
-                          onClick={() => DeleteCNNND(item.idChucNangCuaNND)}
-                        />
+                        <Space direction="horizontal" size={10}>
+                          <Checkbox
+                            checked={checkboxStates[item.idChucNangCuaNND].Xem}
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                item.idChucNangCuaNND,
+                                "Xem",
+                                e.target.checked
+                              )
+                            }
+                          >
+                            Xem
+                          </Checkbox>
+                          <Checkbox
+                            checked={checkboxStates[item.idChucNangCuaNND].Sua}
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                item.idChucNangCuaNND,
+                                "Sua",
+                                e.target.checked
+                              )
+                            }
+                          >
+                            Sửa
+                          </Checkbox>
+                          <Checkbox
+                            checked={checkboxStates[item.idChucNangCuaNND].Xoa}
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                item.idChucNangCuaNND,
+                                "Xoa",
+                                e.target.checked
+                              )
+                            }
+                          >
+                            Xóa
+                          </Checkbox>
+                          <Checkbox
+                            checked={checkboxStates[item.idChucNangCuaNND].Them}
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                item.idChucNangCuaNND,
+                                "Them",
+                                e.target.checked
+                              )
+                            }
+                          >
+                            Thêm
+                          </Checkbox>
+                          <Close
+                            style={{ float: "right" }}
+                            onClick={() => DeleteCNNND(item.idChucNangCuaNND)}
+                          />
+                        </Space>
                       </List.Item>
                     )}
                   />
@@ -396,6 +389,7 @@ function SettingCN(props) {
         visible={Visible}
         unShow={UnShow}
         action={Action}
+        DataNND={dataNND}
       />
     </div>
   );

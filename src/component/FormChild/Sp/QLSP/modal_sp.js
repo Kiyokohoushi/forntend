@@ -118,7 +118,7 @@ function Modal_sp(props) {
         >
           <Form form={form} layout="vertical" autoComplete="off">
             {props.action === "Edit" && (
-              <Form.Item name="picture" label="Hình ảnh">
+              <Form.Item name="Picture" label="Hình ảnh">
                 <Upload
                   multiple
                   listType="picture"

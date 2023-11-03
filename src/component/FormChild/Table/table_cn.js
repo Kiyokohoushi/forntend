@@ -10,6 +10,7 @@ import axios from "axios";
 
 function Table_cn(props) {
   const [DSChucNang, setDSChucNang] = useState();
+  const [DataND, setDataND] = useState();
   const [DataEdit, setDataEdit] = useState();
   const [Action, setAction] = useState();
   const { confirm } = Modal;
@@ -69,10 +70,10 @@ function Table_cn(props) {
     return (
       <>
         <SettingsOutlinedIcon onClick={() => ShowSetting(data)} />
-        <EditOutlinedIcon style={{ marginLeft: "40px" }} onClick={ShowEdit} />
+        <EditOutlinedIcon style={{ marginLeft: "40px" }} onClick={()=>ShowEdit(data)} />
         <DeleteOutlineOutlinedIcon
           style={{ marginLeft: "40px" }}
-          onClick={() => showDelete(data.Nndid)}
+          onClick={() => showDelete(data.NNDID)}
         />
       </>
     );
@@ -146,9 +147,10 @@ function Table_cn(props) {
     setShow(true);
     setAction("Add");
   }
-  function ShowEdit() {
+  function ShowEdit(data) {
     setShow(true);
     setAction("Edit");
+    setDataND(data);
   }
   function HiddentShow() {
     setShow(false);
@@ -176,6 +178,7 @@ function Table_cn(props) {
         show={show}
         hiddentShow={HiddentShow}
         action={Action}
+        DataND={DataND}
       ></ModalCn>
     </div>
   );

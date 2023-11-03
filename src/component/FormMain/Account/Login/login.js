@@ -11,6 +11,7 @@ import viectot from "../Images/job-green-logo.png";
 import "../../../../css/main.css";
 import axios from "axios";
 import { Form, message } from "antd";
+import { EyeOutlined } from "@ant-design/icons";
 
 function Login(props) {
   const { pathname } = useLocation();
@@ -18,6 +19,11 @@ function Login(props) {
   const navigate = useNavigate();
   const frmsdt = useRef(null);
   const frmpass = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
     let loginCheck = localStorage.getItem("Token");
@@ -33,7 +39,7 @@ function Login(props) {
       .post("https://localhost:7177/api/auth/login", values)
       .then((res) => {
         console.log(res);
-        if (res.status === 200) {
+        if (res.data.Status === 1) {
           localStorage.setItem("Token", res.data.Token);
           localStorage.setItem("User", res.data.Username);
           navigate("/");
@@ -65,11 +71,12 @@ function Login(props) {
           placeholder="Số điện thoại"
         />
         <input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           name="password"
           ref={frmpass}
           placeholder="Mật khẩu"
         />
+        <EyeOutlined onClick={toggleShowPassword}/>
 
         <Link to="/repass" className="link1">
           Quên mật khẩu
