@@ -8,35 +8,41 @@ import { useState } from "react";
 function ThemSP(props) {
   const [form] = Form.useForm();
   const [Anh, setAnh] = useState();
-  const [MaSP, setMaSP] = useState();
-  const [TenSP, setTenSP] = useState();
-  const [LoaiSP, setLoaiSP] = useState();
-  const [SoLuong, setSoLuong] = useState();
-  const [DonGia, setDonGia] = useState();
+  const token = localStorage.getItem("Token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  // const [MaSP, setMaSP] = useState();
+  // const [TenSP, setTenSP] = useState();
+  // const [LoaiSP, setLoaiSP] = useState();
+  // const [SoLuong, setSoLuong] = useState();
+  // const [DonGia, setDonGia] = useState();
 
-  function onSave() {
+  const onFinish = async (values) => {
     const formData = new FormData();
     formData.append("file", Anh);
-    formData.append("MSanPham", MaSP);
-    formData.append("TenSP", TenSP);
-    formData.append("LoaiSanPham", LoaiSP);
-    formData.append("SoLuong", SoLuong);
-    formData.append("DonGia", DonGia);
+    formData.append("MSanPham", values.mSanPham);
+    formData.append("TenSP", values.tenSp);
+    formData.append("LoaiSanPham", values.loaiSanPham);
+    formData.append("SoLuong", values.soLuong);
+    formData.append("DonGia", values.donGia);
 
-    axios
-      .post("https://localhost:7177/api/SP/ThemSP", formData)
-      .then((res) => {
-        if (res.data.status === 1) {
-          console.log(res);
-          message.success(res.data.message);
-        } else {
-          message.error(res.data.message);
-        }
-      })
-      .catch((error) => {
-        message.error("Lỗi", error);
-      });
-  }
+    try {
+      const res = await axios.post(
+        "https://localhost:7177/api/SP/ThemSP",
+        formData
+      );
+
+      if (res.data.Status === 1) {
+        console.log(res);
+        message.success(res.data.Message);
+        form.resetFields();
+      } else {
+        message.error(res.data.Message);
+      }
+    } catch (error) {
+      message.error("Lỗi " + error);
+    }
+  };
+
   return (
     <div>
       <Content
@@ -67,15 +73,33 @@ function ThemSP(props) {
             borderRadius: " 0 0 8px 8px",
           }}
         >
-          <Form form={form} layout="vertical" autoComplete="off">
+          <Form
+            form={form}
+            layout="vertical"
+            autoComplete="off"
+            onFinish={onFinish}
+          >
             <Form.Item
               name="picture"
               label="Hình Ảnh"
               onChange={(e) => {
                 setAnh(e.target.files[0]);
               }}
+              rules={[
+                {
+                  validator: (_, value) => {
+                    if (!value) {
+                      return Promise.reject(
+                        "Vui lòng tải lên một hình ảnh cho sản phẩm"
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
             >
               <Upload
+                name="picture"
                 listType="picture"
                 accept="jpg, gif, png, jpeg "
                 beforeUpload={(file) => {
@@ -89,43 +113,72 @@ function ThemSP(props) {
             <Form.Item
               name="mSanPham"
               label="Mã Sản Phẩm"
-              onChange={(e) => setMaSP(e.target.value)}
+              rules={[
+                {
+                  required: true,
+                  message: "Mã sản phẩm không thể để trống.",
+                },
+              ]}
             >
-              <Input />
+              <Input name="mSanPham" />
             </Form.Item>
             <Form.Item
               name="tenSp"
               label="Tên Sản Phẩm"
-              onChange={(e) => setTenSP(e.target.value)}
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tên sản phẩm.",
+                },
+              ]}
             >
-              <Input />
+              <Input name="tenSp" />
             </Form.Item>
 
             <Form.Item
               name="loaiSanPham"
               label="Loại Sản Phẩm"
-              onChange={(e) => setLoaiSP(e.target.value)}
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng chọn hoặc cung cấp loại sản phẩm.",
+                },
+              ]}
             >
-              <Input />
+              <Input name="loaiSanPham" />
             </Form.Item>
 
             <Form.Item
               name="donGia"
               label="Giá"
-              onChange={(e) => setDonGia(e.target.value)}
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng cung cấp giá sản phẩm.",
+                },
+              ]}
             >
-              <Input />
+              <Input name="donGia" />
             </Form.Item>
             <Form.Item
               name="soLuong"
               label="Số Lượng"
-              onChange={(e) => setSoLuong(e.target.value)}
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng cung cấp số lượng sản phẩm.",
+                },
+              ]}
             >
-              <Input />
+              <Input name="soLuong" />
             </Form.Item>
-          <Button type="primary" style={{ marginBottom: "5px" }} onClick={onSave}>
-            Thêm Mới
-          </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ marginBottom: "5px" }}
+            >
+              Thêm Mới
+            </Button>
           </Form>
         </Content>
       </Content>

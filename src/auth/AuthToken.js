@@ -29,9 +29,9 @@ function AuthLayout() {
         .post("https://localhost:7177/api/auth/refresh", dataRefresh)
         .then((res) => {
           if (res.data.Status === 1) {
-            console.log(res.data.Token);
-            message.success(res.data.Message);
+            console.log(res.data);
             localStorage.setItem("Token", res.data.Token);
+            message.success(res.data.Message);
             // Cập nhật hẹn giờ cho việc làm mới token
             setupTokenExpirationTimer();
           } else {
@@ -63,9 +63,10 @@ function AuthLayout() {
         const currentTime = Date.now();
         const timeUntilExpiration = tokenExp - currentTime;
 
-        if (timeUntilExpiration > 0) {
+        if (timeUntilExpiration > 20000) {
+          const timeToRefresh = timeUntilExpiration - 20000;
           // Thiết lập hẹn giờ cho việc làm mới token trước khi hết hạn
-          const tokenTimer = setTimeout(refreshToken, timeUntilExpiration);
+          const tokenTimer = setTimeout(refreshToken, timeToRefresh);
           setTokenExpirationTimer(tokenTimer);
         } else {
           handleLogout();

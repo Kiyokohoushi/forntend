@@ -38,19 +38,18 @@ function Login(props) {
     await axios
       .post("https://localhost:7177/api/auth/login", values)
       .then((res) => {
-        console.log(res);
-        if (res.data.Status === 1) {
+        console.log(res.data);
+        if (res.data.Status ===1) {
           localStorage.setItem("Token", res.data.Token);
           localStorage.setItem("User", res.data.Username);
           navigate("/");
           console.log(res);
           message.success(res.data.Message);
-        } else {
-          message.error(res);
         }
       })
       .catch((error) => {
-        message.error("Lỗi hệ thông vui lòng liện hệ hỗ trợ khách hàng", error);
+        console.error(error);
+        message.error(error.response.data.Message)
       });
   }
 
@@ -64,19 +63,14 @@ function Login(props) {
         </div>
         <h1 className="text">Đăng Nhập</h1>
 
+        <input ref={frmsdt} name="phoneNumber" placeholder="Số điện thoại" />
         <input
-          type="number"
-          ref={frmsdt}
-          name="phoneNumber"
-          placeholder="Số điện thoại"
-        />
-        <input
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           name="password"
           ref={frmpass}
           placeholder="Mật khẩu"
         />
-        <EyeOutlined onClick={toggleShowPassword}/>
+        <EyeOutlined onClick={toggleShowPassword} />
 
         <Link to="/repass" className="link1">
           Quên mật khẩu

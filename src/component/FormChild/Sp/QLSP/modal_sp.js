@@ -8,13 +8,6 @@ function Modal_sp(props) {
   const id = props.dataEdit && props.dataEdit.MSanPham;
   const [Data, setData] = useState();
   const [fileList, setFileList] = useState([]); // Thêm trạng thái fileList
-  const [Anh, setAnh] = useState();
-  const [MaSP, setMaSP] = useState();
-  const [TenSP, setTenSP] = useState();
-  const [LoaiSP, setLoaiSP] = useState();
-  const [SoLuong, setSoLuong] = useState();
-  const [DonGia, setDonGia] = useState();
-
 
   useEffect(() => {
     if (props.action === "Edit" || props.action === "ChiTiet") {
@@ -65,38 +58,34 @@ function Modal_sp(props) {
     } else {
       form.resetFields();
     }
-  }, [props.dataEdit]);
+  }, [form, id, props.action]);
 
   const fileListMoi = ({ fileList }) => {
     setFileList(fileList);
   };
 
-  async function onSave() {
-    if (props.action === "Add") {
-      const formData = new FormData();
-      formData.append("file", Anh);
-      formData.append("MSanPham", MaSP);
-      formData.append("TenSP", TenSP);
-      formData.append("LoaiSanPham", LoaiSP);
-      formData.append("SoLuong", SoLuong);
-      formData.append("DonGia", DonGia);
-      await props.save(formData);
-      form.resetFields();
-    }
+  const handleSave = () => {
+    form.submit();
+  };
 
-    if (props.action === "Edit") {
-      const dataEdit = await form.validateFields();
-      const formData = new FormData();
-      formData.append("file", fileList[0].originFileObj);
-      formData.append("MSanPham", dataEdit.MSanPham);
-      formData.append("TenSP", dataEdit.TenSP);
-      formData.append("LoaiSanPham", dataEdit.LoaiSanPham);
-      formData.append("SoLuong", dataEdit.SoLuong);
-      formData.append("DonGia", dataEdit.DonGia);
-      await props.save(formData);
+  const onFinish = async (values) => {
+    console.log(values);
+    try {
+      if (props.action === "Edit") {
+        const formData = new FormData();
+        formData.append("file", fileList[0].originFileObj);
+        formData.append("MSanPham", values.MSanPham);
+        formData.append("TenSP", values.TenSP);
+        formData.append("LoaiSanPham", values.LoaiSanPham);
+        formData.append("SoLuong", values.SoLuong);
+        formData.append("DonGia", values.DonGia);
+        await props.save(formData);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }
-  if (props.action === "Add" || props.action === "Edit") {
+  };
+  if (props.action === "Edit") {
     return (
       <>
         <Modal
@@ -111,72 +100,59 @@ function Modal_sp(props) {
             <Button key="back" onClick={props.hiddenModal}>
               Thoát
             </Button>,
-            <Button key="submit" type="primary" onClick={onSave}>
+            <Button
+              key="submit"
+              type="primary"
+              htmlType="submit"
+              onClick={handleSave}
+            >
               Lưu
             </Button>,
           ]}
         >
-          <Form form={form} layout="vertical" autoComplete="off">
-            {props.action === "Edit" && (
-              <Form.Item name="Picture" label="Hình ảnh">
-                <Upload
-                  multiple
-                  listType="picture"
-                  accept=".png, .jpg, .gif, jpeg"
-                  maxCount={1}
-                  fileList={fileList} // Sử dụng fileList trong trạng thái ở đây
-                  beforeUpload={(file) => {
-                    console.log({ file });
-                    return false;
-                  }}
-                  onChange={fileListMoi}
-                >
-                  <Button icon={<UploadOutlined />}>Tải Lên</Button>
-                </Upload>
-              </Form.Item>
-            )}
-            {props.action === "Add" && (
-              <Form.Item
+          <Form
+            form={form}
+            layout="vertical"
+            autoComplete="off"
+            onFinish={onFinish}
+          >
+            <Form.Item
+              name="Picture"
+              label="Hình ảnh"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng tải lên một hình ảnh cho sản phẩm",
+                },
+              ]}
+            >
+              <Upload
                 name="Picture"
-                label="Hình ảnh"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng thêm ảnh",
-                  },
-                ]}
-                onChange={(e) => {
-                  setAnh(e.target.files[0]);
+                multiple
+                listType="picture"
+                accept=".png, .jpg, .gif, jpeg"
+                maxCount={1}
+                fileList={fileList} // Sử dụng fileList trong trạng thái ở đây
+                beforeUpload={(file) => {
+                  console.log({ file });
+                  return false;
                 }}
+                onChange={fileListMoi}
               >
-                <Upload
-                  listType="picture"
-                  accept=".png, .jpg, .gif, jpeg"
-                  maxCount={1}
-                  beforeUpload={(file) => {
-                    console.log({ file });
-                    return false;
-                  }}
-                >
-                  <Button icon={<UploadOutlined />}>Tải Lên</Button>
-                </Upload>
-              </Form.Item>
-            )}
-
+                <Button icon={<UploadOutlined />}>Tải Lên</Button>
+              </Upload>
+            </Form.Item>
             <Form.Item
               name="MSanPham"
               label="Mã Sản Phẩm"
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng nhập mã sản phẩm",
+                  message: "Mã sản phẩm không được để trống.",
                 },
               ]}
-              onChange={(e) => {
-                setMaSP(e.target.value);
-              }}
             >
-              <Input />
+              <Input name="MSanPham" disabled/>
             </Form.Item>
             <Form.Item
               name="TenSP"
@@ -184,14 +160,11 @@ function Modal_sp(props) {
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng nhập tên sản phẩm",
+                  message: "Vui lòng nhập tên sản phẩm.",
                 },
               ]}
-              onChange={(e) => {
-                setTenSP(e.target.value);
-              }}
             >
-              <Input />
+              <Input name="TenSP" />
             </Form.Item>
             <Form.Item
               name="LoaiSanPham"
@@ -199,14 +172,11 @@ function Modal_sp(props) {
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng nhập loại sản phấm",
+                  message: "Vui lòng nhập loại sản phẩm.",
                 },
               ]}
-              onChange={(e) => {
-                setLoaiSP(e.target.value);
-              }}
             >
-              <Input />
+              <Input name="LoaiSanPham" />
             </Form.Item>
 
             <Form.Item
@@ -218,22 +188,20 @@ function Modal_sp(props) {
                   message: "Vui lòng nhập đơn giá",
                 },
               ]}
-              onChange={(e) => {
-                setDonGia(e.target.value);
-              }}
             >
-              <InputNumber />
+              <InputNumber name="DonGia" />
             </Form.Item>
             <Form.Item
               name="SoLuong"
               label="Số Lượng"
-              required
-              messageVariables={"Vui lòng nhập số lượng"}
-              onChange={(e) => {
-                setSoLuong(e.target.value);
-              }}
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập số lượng.",
+                },
+              ]}
             >
-              <InputNumber />
+              <InputNumber name="SoLuong" />
             </Form.Item>
           </Form>
         </Modal>

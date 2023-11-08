@@ -45,21 +45,7 @@ function Table_sp(props) {
         console.log(error);
       });
   }
-  async function themMoi(formData) {
-    await axios
-      .post("https://localhost:7177/api/SP/ThemSP", formData)
-      .then((res) => {
-        if (res.data.Status === 1) {
-          console.log(res);
-          message.success(res.data.Message);
-        } else {
-          message.error(res.data.Message);
-        }
-      })
-      .catch((error) => {
-        message.error("Lỗi", error);
-      });
-  }
+
   async function suaSP(formData) {
     await axios
       .put("https://localhost:7177/api/SP/SuaSP", formData)
@@ -80,11 +66,6 @@ function Table_sp(props) {
     getDSSanPham();
   }, []);
 
-  function showAdd() {
-    setVisibleModal(true);
-    setAction("Add");
-    setDataEdit(null);
-  }
   function showEdit(data) {
     setVisibleModal(true);
     setAction("Edit");
@@ -115,9 +96,7 @@ function Table_sp(props) {
       });
   }
   async function save(formData) {
-    if (Action === "Add") {
-      await themMoi(formData);
-    } else {
+    if (Action === "Edit") {
       await suaSP(formData);
     }
     await getDSSanPham();
@@ -201,17 +180,6 @@ function Table_sp(props) {
   return (
     <div>
       <div className="headerSP">
-        <Button
-          style={{
-            backgroundColor: "#1677ff",
-            color: "white",
-            marginBottom: "10px",
-          }}
-          onClick={showAdd}
-        >
-          <PlusOutlined />
-          Thêm mới sản phẩm
-        </Button>
         <div className="search">
           <Input
             placeholder="Tìm kiếm"
