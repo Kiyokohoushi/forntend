@@ -1,6 +1,6 @@
 import { Form, Input, InputNumber, Modal, Select } from "antd";
 import { React, useState } from "react";
-import "../../../../css/User.css";
+import "../../../../../css/User.css";
 
 function ModalUser(props) {
   const [form] = Form.useForm();

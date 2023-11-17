@@ -8,7 +8,7 @@ import {
   Select,
   Space,
 } from "antd";
-import "../../../../css/ChucNang.css";
+import "../../../../../css/ChucNang.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Dropdown, Layout, Modal } from "antd";
 import Menu from "../menu/menu";
-import "../../../css/main.css";
+import "../../../../css/main.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 const { Header, Sider, Content } = Layout;

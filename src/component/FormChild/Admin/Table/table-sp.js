@@ -8,7 +8,7 @@ import {
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import "../../../css/SanPham.css";
+import "../../../../css/SanPham.css";
 import axios from "axios";
 
 function Table_sp(props) {
@@ -155,24 +155,6 @@ function Table_sp(props) {
       align: "center",
       dataIndex: "TenSP",
       key: "TenSP",
-    },
-    {
-      title: "Loại Sản Phẩm",
-      align: "center",
-      dataIndex: "LoaiSanPham",
-      key: "LoaiSanPham",
-    },
-    {
-      title: "Giá",
-      align: "center",
-      dataIndex: "DonGia",
-      key: "DonGia",
-    },
-    {
-      title: "Số Lượng",
-      align: "center",
-      dataIndex: "SoLuong",
-      key: "SoLuong",
     },
     { title: "Thao tác", align: "center", render: thaotac },
   ];

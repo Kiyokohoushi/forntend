@@ -1,8 +1,8 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Upload, message } from "antd";
+import { Button, Form, Input, Select, Upload, message } from "antd";
 import { Content } from "antd/es/layout/layout";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 function ThemSP(props) {
@@ -10,20 +10,29 @@ function ThemSP(props) {
   const [Anh, setAnh] = useState();
   const token = localStorage.getItem("Token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  // const [MaSP, setMaSP] = useState();
+  const [DSLoaiSanPham, setDSLoaiSanPham] = useState([]);
   // const [TenSP, setTenSP] = useState();
   // const [LoaiSP, setLoaiSP] = useState();
   // const [SoLuong, setSoLuong] = useState();
   // const [DonGia, setDonGia] = useState();
 
+  async function GetDSLoaiSanPham(){
+    axios.get("https://localhost:7177/api/LoaiSanPham/DanhSachLoaiSP?page=1")
+    .then((res)=>{
+      setDSLoaiSanPham(res.data.Data);
+    }).catch((err)=>{
+      console.log(err);
+    });
+  }
+  useEffect((res)=>{
+    GetDSLoaiSanPham();
+  },[]);
   const onFinish = async (values) => {
     const formData = new FormData();
     formData.append("file", Anh);
     formData.append("MSanPham", values.mSanPham);
     formData.append("TenSP", values.tenSp);
     formData.append("LoaiSanPham", values.loaiSanPham);
-    formData.append("SoLuong", values.soLuong);
-    formData.append("DonGia", values.donGia);
 
     try {
       const res = await axios.post(
@@ -145,33 +154,15 @@ function ThemSP(props) {
                 },
               ]}
             >
-              <Input name="loaiSanPham" />
+              <Select
+  
+              >
+              {DSLoaiSanPham.map((item) => (
+                <option value={item.ID_LoaiSanPham} key={item.ID_LoaiSanPham}>{item.TenLoaiSP}</option>
+              ))}
+              </Select>
             </Form.Item>
 
-            <Form.Item
-              name="donGia"
-              label="Giá"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng cung cấp giá sản phẩm.",
-                },
-              ]}
-            >
-              <Input name="donGia" />
-            </Form.Item>
-            <Form.Item
-              name="soLuong"
-              label="Số Lượng"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng cung cấp số lượng sản phẩm.",
-                },
-              ]}
-            >
-              <Input name="soLuong" />
-            </Form.Item>
             <Button
               type="primary"
               htmlType="submit"

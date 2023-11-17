@@ -10,15 +10,13 @@ function AuthLayout() {
   const navigate = useNavigate();
   const [tokenExpirationTimer, setTokenExpirationTimer] = useState(null);
   const token = localStorage.getItem("Token");
-;
-
   useEffect(() => {
     // Kiểm tra trạng thái đăng nhập ban đầu
     checkLoginStatus();
   }, []);
 
   const refreshToken = async () => {
-    const decodedToken = decodeJwt(token)
+    const decodedToken = decodeJwt(token);
     try {
       let dataRefresh = {
         PhoneNumber: decodedToken.PhoneNumber,
@@ -57,7 +55,7 @@ function AuthLayout() {
 
   const setupTokenExpirationTimer = () => {
     if (token) {
-      const decodedToken = decodeJwt(token)
+      const decodedToken = decodeJwt(token);
       try {
         const tokenExp = decodedToken.exp * 1000;
         const currentTime = Date.now();
@@ -98,7 +96,7 @@ function AuthLayout() {
       setupTokenExpirationTimer();
     }
   };
-  
+
   const checkLoginStatus = () => {
     let loginCheck = localStorage.getItem("Token");
     setIsLogin(!!loginCheck); // Đã đăng nhập nếu có token

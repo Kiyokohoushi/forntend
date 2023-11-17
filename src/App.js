@@ -8,14 +8,14 @@ import {
 import Register from "./component/FormMain/Account/Register/register";
 import Login from "./component/FormMain/Account/Login/login";
 import Repass from "./component/FormMain/Account/Repass/repass";
-import Home from "./component/FormMain/Home/home";
-import SanPham from "./component/FormChild/Sp/QLSP/SanPham";
-import LoaiSP from "./component/FormChild/Sp/LoaiSP/LoaiSP";
-import ThemSP from "./component/FormChild/ThemMoi/ThemSP";
-import User from "./component/FormChild/QuanTri/Users/TaiKhoan";
-import ChucNang from "./component/FormChild/QuanTri/ChucNang/ChucNang";
-import QLKho from "./component/FormChild/Kho/QLKho/QLKho";
-import PhieuKho from "./component/FormChild/Kho/PhieuKho/PhieuKho";
+import Home from "./component/FormChild/Admin/Home/home";
+import SanPham from "./component/FormChild/Admin/Sp/QLSP/SanPham";
+import LoaiSP from "./component/FormChild/Admin/Sp/LoaiSP/LoaiSP";
+import ThemSP from "./component/FormChild/Admin/ThemMoi/ThemSP";
+import User from "./component/FormChild/Admin/QuanTri/Users/TaiKhoan";
+import ChucNang from "./component/FormChild/Admin/QuanTri/ChucNang/ChucNang";
+import QLKho from "./component/FormChild/Admin/Kho/QLKho/QLKho";
+import PhieuKho from "./component/FormChild/Admin/Kho/PhieuKho/PhieuKho";
 import AuthLayout from "./auth/AuthToken";
 
 const App = () => {

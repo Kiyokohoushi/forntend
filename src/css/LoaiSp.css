@@ -12,3 +12,7 @@
     display: flex;
     justify-content: flex-end;
 }
+.costumInput{
+    width: 340px;
+    float: right;
+}
