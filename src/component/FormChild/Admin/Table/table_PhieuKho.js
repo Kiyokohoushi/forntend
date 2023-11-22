@@ -2,6 +2,7 @@ import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Input, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import ModalNK from "../Kho/PhieuKho/modal_PhieuKho";
+import TablePK from "../Kho/PhieuKho/table_EX";
 import "../../../../css/phieukho.css";
 import axios from "axios";
 
@@ -118,7 +119,7 @@ function Table_PhieuKho(props) {
         rowKey={"ID_PhieuNhap"}
         expandable={{
          expandedRowRender: (record) => (
-          <Table/>
+          <TablePK/>
          )
         }}
         dataSource={DSPhieuNhap}

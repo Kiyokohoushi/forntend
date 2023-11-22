@@ -6,10 +6,11 @@ import { useLocation, Navigate, useNavigate, Outlet } from "react-router-dom";
 
 function AuthLayout() {
   const { pathname } = useLocation();
-  const [IsLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
   const [tokenExpirationTimer, setTokenExpirationTimer] = useState(null);
   const token = localStorage.getItem("Token");
+
   useEffect(() => {
     // Kiểm tra trạng thái đăng nhập ban đầu
     checkLoginStatus();
@@ -23,22 +24,17 @@ function AuthLayout() {
         RefreshToken: decodedToken.RefreshToken,
         AccessToken: token,
       };
-      axios
-        .post("https://localhost:7177/api/auth/refresh", dataRefresh)
-        .then((res) => {
-          if (res.data.Status === 1) {
-            console.log(res.data);
-            localStorage.setItem("Token", res.data.Token);
-            message.success(res.data.Message);
-            // Cập nhật hẹn giờ cho việc làm mới token
-            setupTokenExpirationTimer();
-          } else {
-            message.error(res.data.Message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const res = await axios.post("https://localhost:7177/api/auth/refresh", dataRefresh);
+      
+      if (res.data.Status === 1) {
+        console.log(res.data);
+        localStorage.setItem("Token", res.data.Token);
+        message.success(res.data.Message);
+        // Cập nhật hẹn giờ cho việc làm mới token
+        setupTokenExpirationTimer();
+      } else {
+        message.error(res.data.Message);
+      }
     } catch (error) {
       console.error("Lỗi làm mới token:", error);
       // Xử lý lỗi khi không thể làm mới token
@@ -97,6 +93,14 @@ function AuthLayout() {
     }
   };
 
+  useEffect(() => {
+    // Cleanup khi component unmount
+    return () => {
+      window.removeEventListener("mousemove", handleUserActivity);
+      window.removeEventListener("keydown", handleUserActivity);
+    };
+  }, []);
+
   const checkLoginStatus = () => {
     let loginCheck = localStorage.getItem("Token");
     setIsLogin(!!loginCheck); // Đã đăng nhập nếu có token
@@ -109,7 +113,7 @@ function AuthLayout() {
     }
   };
 
-  if (!IsLogin && pathname !== "/login") {
+  if (!isLogin && pathname !== "/login") {
     return <Navigate to="/login" replace />;
   }
 

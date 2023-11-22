@@ -1,0 +1,79 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/*Left Header*/
+.Left {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    min-height: 64px;
+}
+
+.BoxLogo {
+    display: flex;
+    align-items: center;
+}
+
+.Logo {
+    margin: 0;
+    padding: auto;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 20px;
+}
+
+.BoxMenu a {
+    font-family: 'Itim', cursive;
+    font-size: 17px;
+    color: black;
+}
+
+.BoxMenu a:hover {
+    color: blueviolet;
+}
+
+/* Right Header */
+.Right {
+    width: 55%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 64px;
+}
+
+.BoxSearch {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    width: 200%;
+}
+
+.BoxOrderCart a {
+    font-family: 'Farsan', cursive;
+    font-size: 20px;
+    color: black;
+}
+
+.BoxOrderCart a:hover,
+.BoxOrderCart a:active {
+    color: #0e59d1;
+}
+
+.BoxAccount {
+    display: flex;
+    align-items: center;
+}
+.Name{
+    margin-right: 10px;
+}
+/* Button */
+.ButtonAccount a{
+    font-family: 'Farsan', cursive;
+    font-size: 20px;
+    color: black;
+}
+.ButtonAccount a:hover{
+    color: #0e59d1;
+}

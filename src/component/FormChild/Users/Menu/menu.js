@@ -1,6 +1,6 @@
 import React from 'react';
 
-function menu(props) {
+function Menu(props) {
     return (
         <div>
             
@@ -8,4 +8,4 @@ function menu(props) {
     );
 }
 
-export default menu;
+export default Menu;

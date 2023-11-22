@@ -20,7 +20,8 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-scripts": "^5.0.1",
     "styled-components": "^6.0.7",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "webfontloader": "^1.6.28"
   },
   "scripts": {
     "start": "react-scripts start",
