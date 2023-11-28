@@ -5,7 +5,7 @@ import { Table, Input, Button, message } from "antd";
 const { Search } = Input;
 
 function Table_QLKho(props) {
-  const [DSKho, setDSKho] = useState();
+  const [DSKho, setDSKho] = useState(null);
 
   async function getDSKho() {
     await axios
@@ -18,6 +18,27 @@ function Table_QLKho(props) {
       .catch((err) => {
         console.log(err);
       });
+  }
+  async function getDSKhoHetHang(){
+   await axios.get("https://localhost:7177/api/ChiTietPhieuNhap/DanhSachKhoDaHetHang?page=1")
+    .then((res)=>{
+      if(res.status === 200){
+        setDSKho(res.data.Data)
+      }
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+  async function getDSKhoSapHet(){
+   await axios.get("https://localhost:7177/api/ChiTietPhieuNhap/DanhSachKhoSapHetHang?page=1")
+    .then((res)=>{
+      if(res.status === 200){
+      setDSKho(res.data.Data);
+      }
+    }).catch((err)=>{
+      console.log(err);
+    })
   }
   useEffect(() => {
     getDSKho();
@@ -69,16 +90,16 @@ function Table_QLKho(props) {
           <Search placeholder="Tìm kiếm theo tên" />
         </div>
         <div className="Filter_Kho">
-          <Button style={{ color: "red", width: "150px", borderRadius: "0px" }}>
+          <Button style={{ color: "red", width: "150px", borderRadius: "0px" }} onClick={()=>getDSKho()}>
             Tất Cả
           </Button>
           <Button
-            style={{ color: "orange", width: "150px", borderRadius: "0px" }}
+            style={{ color: "orange", width: "150px", borderRadius: "0px" }} onClick={()=>getDSKhoSapHet()}
           >
             Sắp Hết Hàng
           </Button>
           <Button
-            style={{ color: "Blue", width: "150px", borderRadius: "0px" }}
+            style={{ color: "Blue", width: "150px", borderRadius: "0px" }} onClick={()=>getDSKhoHetHang()}
           >
             Đã Hết Hàng
           </Button>

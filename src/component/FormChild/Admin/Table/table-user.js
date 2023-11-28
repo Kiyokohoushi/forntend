@@ -91,6 +91,7 @@ function Table_user(props) {
       align:"center",
       dataIndex: "isActive",
       key: "isActive",
+      render: (TrangThai) => TrangThai ? "Đang hoạt động" : "Ngừng hoạt động"
     },
     {
       align: "center",

@@ -35,9 +35,9 @@ function Login(props) {
     const decodedToken = decodeJwt(token);
 
     if (decodedToken.NhomNguoiDung === "Admin") {
-      navigate("/");
+      navigate("/admin");
     } else {
-      navigate("/TrangChu");
+      navigate("/");
     }
   }
 
@@ -72,7 +72,7 @@ function Login(props) {
   }
 
   return isLogin ? (
-    <Navigate to={"/"} replace />
+    <Navigate to={"/admin"} replace />
   ) : (
     <div className="Main-app">
       <Form className="form" onFinish={onFinish}>

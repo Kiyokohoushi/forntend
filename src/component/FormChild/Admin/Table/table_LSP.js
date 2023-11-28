@@ -132,8 +132,8 @@ function Table_LSP(props) {
       centered: true,
       title: <p style={{ color: "red" }}>Bạn có muốn xóa không ?</p>,
       icon: <WarningFilled style={{ color: "red" }} />,
-      cancelText: "Không",
       okText: "Có",
+      cancelText: "Không",
       onOk() {
         axios
           .delete("https://localhost:7177/api/LoaiSanPham/XoaLoaiSP", {

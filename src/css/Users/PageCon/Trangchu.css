@@ -1,0 +1,37 @@
+.Banner{
+    
+}
+.Content{
+
+}
+.RecomendStuff{
+
+}
+.Top{
+    display: flex;
+    justify-content: space-between;
+    
+}
+.Fashion{
+
+}
+.BeautyAndHealth{
+
+}
+.scroll-container{
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 11%;
+    justify-items: center;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+.item{
+    margin: auto;
+    padding: 0;
+    text-align: center;
+}
+.item p{
+    margin-top:-40px;
+    padding: 0;
+}

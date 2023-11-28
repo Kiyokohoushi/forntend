@@ -9,9 +9,11 @@ function AuthLayout() {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
   const [tokenExpirationTimer, setTokenExpirationTimer] = useState(null);
-  const token = localStorage.getItem("Token");
+  const [token, setToken] = useState();
 
   useEffect(() => {
+    let checkToken= localStorage.getItem("Token");
+    setToken(checkToken);
     // Kiểm tra trạng thái đăng nhập ban đầu
     checkLoginStatus();
   }, []);
@@ -63,6 +65,7 @@ function AuthLayout() {
           const tokenTimer = setTimeout(refreshToken, timeToRefresh);
           setTokenExpirationTimer(tokenTimer);
         } else {
+          console.log("Ở đây lỗi")
           handleLogout();
         }
       } catch (error) {

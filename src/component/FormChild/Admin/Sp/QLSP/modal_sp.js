@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Form, Input, InputNumber, Upload, message } from "antd";
+import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 
@@ -12,11 +12,10 @@ function Modal_sp(props) {
   useEffect(() => {
     if (props.action === "Edit" || props.action === "ChiTiet") {
       axios
-        .post("https://localhost:7177/api/SP/ChiTietSp?msp=" + id)
+        .post("https://localhost:7177/api/SP/ChiTietSP " + id)
         .then(async (res) => {
           console.log(res);
-          const { MSanPham, TenSP, LoaiSanPham, SoLuong, DonGia, Picture } =
-            res.data;
+          const { MSanPham, TenSP, LoaiSanPham, Picture } = res.data;
 
           const response = await axios.get("https://localhost:7177" + Picture, {
             responseType: "arraybuffer",
@@ -47,8 +46,6 @@ function Modal_sp(props) {
             MSanPham,
             TenSP,
             LoaiSanPham,
-            DonGia,
-            SoLuong,
           });
           setData(data);
         })
@@ -77,8 +74,6 @@ function Modal_sp(props) {
         formData.append("MSanPham", values.MSanPham);
         formData.append("TenSP", values.TenSP);
         formData.append("LoaiSanPham", values.LoaiSanPham);
-        formData.append("SoLuong", values.SoLuong);
-        formData.append("DonGia", values.DonGia);
         await props.save(formData);
       }
     } catch (error) {
@@ -152,7 +147,7 @@ function Modal_sp(props) {
                 },
               ]}
             >
-              <Input name="MSanPham" disabled/>
+              <Input name="MSanPham" disabled />
             </Form.Item>
             <Form.Item
               name="TenSP"
@@ -177,31 +172,6 @@ function Modal_sp(props) {
               ]}
             >
               <Input name="LoaiSanPham" />
-            </Form.Item>
-
-            <Form.Item
-              name="DonGia"
-              label="Giá"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập đơn giá",
-                },
-              ]}
-            >
-              <InputNumber name="DonGia" />
-            </Form.Item>
-            <Form.Item
-              name="SoLuong"
-              label="Số Lượng"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập số lượng.",
-                },
-              ]}
-            >
-              <InputNumber name="SoLuong" />
             </Form.Item>
           </Form>
         </Modal>
@@ -242,12 +212,6 @@ function Modal_sp(props) {
               </tr>
               <tr>
                 <td>Loại sản phẩm: {Data && Data.LoaiSanPham} </td>
-              </tr>
-              <tr>
-                <td>Giá: {Data && Data.DonGia} </td>
-              </tr>
-              <tr>
-                <td>Số lượng: {Data && Data.SoLuong} </td>
               </tr>
             </tbody>
           </table>

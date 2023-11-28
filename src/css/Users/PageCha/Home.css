@@ -77,3 +77,33 @@
 .ButtonAccount a:hover{
     color: #0e59d1;
 }
+.TitleFooter{
+    text-align: center;
+}
+.ContentFooter{
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+}
+.SanPham{
+    width: 150px;
+    margin-right: 40px;
+}
+.SanPham p{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: gray;
+}
+.CSKH{
+    margin-right: 40px;
+}
+.CSKH p{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: gray;
+}
+.ThanhToan p{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: gray;
+}
