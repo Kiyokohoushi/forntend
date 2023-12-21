@@ -2,18 +2,47 @@ import React, { useEffect, useState } from "react";
 import logo from "../PageCha/Image/Logo.png";
 import "../../../../css/Users/PageCha/Home.css";
 import { Content, Footer, Header } from "antd/es/layout/layout";
-import { Avatar, Button, Flex, Input, Layout, Space } from "antd";
+import { Avatar, Button, Dropdown, Modal, Input, Layout, Space } from "antd";
 import {
   SearchOutlined,
   ShoppingCartOutlined,
   BellOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 function Home(props) {
+  const { confirm } = Modal;
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState();
+  const items = [
+    {
+      label: <Link to={"/user"}>Tài khoản của tôi</Link>,
+    },
+    {
+      label: "Đơn hàng",
+    },
+    {
+      label: "Đăng xuất",
+      danger: true,
+      onClick: Logout,
+    },
+  ];
 
+  async function Logout() {
+    confirm({
+      centered: true,
+      title: "Thông Báo",
+      content: "Bạn có muốn đăng xuất không",
+      cancelText: "Hủy",
+      okText: "Có",
+      onOk() {
+        localStorage.removeItem("Token");
+        localStorage.removeItem("User");
+        navigate("/login");
+      },
+    });
+  }
   useEffect(() => {
     let CheckToken = localStorage.getItem("User");
 
@@ -29,8 +58,6 @@ function Home(props) {
             display: "flex",
             backgroundColor: "white",
             alignItems: "center",
-            position: "fixed",
-            zIndex: "1000px",
           }}
         >
           <div className="Left">
@@ -94,7 +121,13 @@ function Home(props) {
                     </div>
                   )}
                 </div>
-                <Avatar />
+                <Dropdown
+                  menu={{ items }}
+                  trigger={"click"}
+                  overlayStyle={{ width: "180px" }}
+                >
+                  <Avatar />
+                </Dropdown>
               </div>
             </Space>
           </div>

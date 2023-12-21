@@ -192,7 +192,6 @@ function SettingCN(props) {
   }
 
   // Hàm xử lý thay đổi trạng thái checkbox cho một idChucNang cụ thể
-  // Hàm xử lý thay đổi trạng thái checkbox cho một idChucNang cụ thể
   const handleCheckboxChange = (idChucNangCuaNND, key, value) => {
     setDisabled(false);
     setCheckboxStates((prevState) => ({

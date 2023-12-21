@@ -33,6 +33,7 @@ const items = [
   ]),
   getItem(<Link to="/admin/QlKho">Quản Lý Kho</Link>,"9"),
   getItem(<Link to="/admin/PhieuKho">Phiếu Nhập Kho</Link>, "10"),
+  getItem(<Link to="/admin/giaban">Quản lý giá bán</Link>, "11"),
 
 ];
 

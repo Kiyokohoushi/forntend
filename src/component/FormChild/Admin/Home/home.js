@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Dropdown, Layout, Modal } from "antd";
 import Menu from "../menu/menu";
-import "../../../../css/main.css";
+import "../../../../css/Home.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 const { Header, Sider, Content } = Layout;
@@ -9,28 +9,28 @@ const { Header, Sider, Content } = Layout;
 function Home(props) {
   const navigate = useNavigate();
   const NameUser = localStorage.getItem("User");
-  const {confirm} = Modal;
-  
+  const { confirm } = Modal;
+
   const items = [
     {
-      label:"Đăng xuất",
+      label: "Đăng xuất",
       danger: true,
       onClick: Logout,
     },
-  ]
-  function Logout(){
+  ];
+  function Logout() {
     confirm({
       centered: true,
-      title:"Thông Báo",
-      content:"Bạn có muốn đăng xuất không",
-      cancelText:"Hủy",
-      okText:"Có",
-      onOk(){
+      title: "Thông Báo",
+      content: "Bạn có muốn đăng xuất không",
+      cancelText: "Hủy",
+      okText: "Có",
+      onOk() {
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
         navigate("/login");
-      }
-    })
+      },
+    });
   }
 
   return (
@@ -46,24 +46,20 @@ function Home(props) {
           <div className="title">
             <p>QUẢN LÝ HỆ THỐNG</p>
           </div>
-          <Dropdown menu={ {items} } trigger={"click"}>
             <div className="right_header">
-              <div>
-                <Avatar
-                  size={"large"}
-                  icon={<UserOutlined />}
-                  style={{ marginRight: "10px" }}
-                />
-              </div>
-              <div>
-                <input
-                  value={NameUser}
-                  style={{ border: "0px", fontSize: "15px" }}
-                  disabled
-                ></input>
-              </div>
+            <Dropdown menu={{items}} trigger={"click"} overlayStyle={{width:"180px"}}>
+              <Avatar
+                size={"large"}
+                icon={<UserOutlined />}
+                style={{ marginRight: "10px" }}
+              />
+              </Dropdown>
+              <input
+                value={NameUser}
+                style={{ border: "0px", fontSize: "15px" }}
+                disabled
+              ></input>
             </div>
-          </Dropdown>
         </Header>
         <Content className="Content">
           <Outlet />

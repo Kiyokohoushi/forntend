@@ -3,62 +3,59 @@ import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("Lỗi khi truy xuất dữ liệu:", error);
+    message.error("Có lỗi xảy ra khi truy xuất dữ liệu.");
+    return Promise.reject(error);
+  }
+);
+
 function Modal_sp(props) {
   const [form] = Form.useForm();
-  const id = props.dataEdit && props.dataEdit.MSanPham;
-  const [Data, setData] = useState();
-  const [fileList, setFileList] = useState([]); // Thêm trạng thái fileList
+  const id = props.dataEdit?.MSanPham;
+  const [data, setData] = useState();
+  const [fileList, setFileList] = useState([]);
 
-  useEffect(() => {
-    if (props.action === "Edit" || props.action === "ChiTiet") {
-      axios
-        .post("https://localhost:7177/api/SP/ChiTietSP " + id)
-        .then(async (res) => {
-          console.log(res);
-          const { MSanPham, TenSP, LoaiSanPham, Picture } = res.data;
+  const updateFileList = async () => {
+    try {
+      const response = await axios.post(
+        `https://localhost:7177/api/SP/ChiTietSP ${id}`
+      );
 
-          const response = await axios.get("https://localhost:7177" + Picture, {
-            responseType: "arraybuffer",
-          });
+      const Data = response.data;
+      const imageData = response.data.Picture;
 
-          const blob = new Blob([response.data], { type: "image/png" });
-          const imageFile = new File([blob], "image.png", {
-            type: "image/png",
-          });
+      const imageBlob = new Blob([imageData], { type: "image/png" });
+      const imageFile = new File([imageBlob], "image.png", {
+        type: "image/png",
+      });
 
-          const data = res.data;
-          const urlAnh = URL.createObjectURL(blob);
+      const imageUrl = imageData;
 
-          setFileList([
-            {
-              uid: "-1",
-              name: "image.png",
-              status: "done",
-              url: urlAnh,
-              thumbUrl: urlAnh,
-              originFileObj: imageFile, // Đặt đối tượng tệp tin ở đây
-            },
-          ]);
+      setFileList([
+        {
+          uid: "-1",
+          name: "image.png",
+          status: "done",
+          url: imageUrl,
+          thumbUrl: imageUrl,
+          originFileObj: imageFile,
+        },
+      ]);
 
-          // Đặt giá trị cho các trường khác trong biểu mẫu
-          form.setFieldsValue({
-            Picture: imageFile, // Đặt đối tượng tệp tin ở đây
-            MSanPham,
-            TenSP,
-            LoaiSanPham,
-          });
-          setData(data);
-        })
-        .catch((error) => {
-          message.error("lỗi", error);
-        });
-    } else {
-      form.resetFields();
+      form.setFieldsValue({
+        Picture: imageFile,
+        MSanPham: Data.MSanPham,
+        TenSP: Data.TenSP,
+        LoaiSanPham: Data.LoaiSanPham,
+      });
+
+      setData(Data);
+    } catch (error) {
+      console.error("Lỗi khi truy xuất chi tiết sản phẩm:", error);
     }
-  }, [form, id, props.action]);
-
-  const fileListMoi = ({ fileList }) => {
-    setFileList(fileList);
   };
 
   const handleSave = () => {
@@ -66,30 +63,34 @@ function Modal_sp(props) {
   };
 
   const onFinish = async (values) => {
-    console.log(values);
     try {
       if (props.action === "Edit") {
         const formData = new FormData();
-        formData.append("file", fileList[0].originFileObj);
+        formData.append("file", fileList[0]?.originFileObj);
         formData.append("MSanPham", values.MSanPham);
         formData.append("TenSP", values.TenSP);
         formData.append("LoaiSanPham", values.LoaiSanPham);
+
         await props.save(formData);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Lỗi khi lưu dữ liệu:", error);
     }
   };
-  if (props.action === "Edit") {
-    return (
-      <>
+
+  useEffect(() => {
+    if (props.action === "Edit" || props.action === "ChiTiet") {
+      updateFileList();
+    } else {
+      form.resetFields();
+    }
+  }, [form, id, props.action]);
+  return (
+    <div>
+      {props.action === "Edit" && (
         <Modal
           open={props.visible}
-          title={
-            props.action === "Add"
-              ? "Thêm mới sản phẩm"
-              : "Cập nhập thông tin sản phẩm"
-          }
+          title={"Cập nhập thông tin sản phẩm"}
           onCancel={props.hiddenModal}
           footer={[
             <Button key="back" onClick={props.hiddenModal}>
@@ -123,16 +124,13 @@ function Modal_sp(props) {
             >
               <Upload
                 name="Picture"
-                multiple
+                multiple={false}
                 listType="picture"
-                accept=".png, .jpg, .gif, jpeg"
+                accept=".png, .jpg, .gif, .jpeg"
                 maxCount={1}
-                fileList={fileList} // Sử dụng fileList trong trạng thái ở đây
-                beforeUpload={(file) => {
-                  console.log({ file });
-                  return false;
-                }}
-                onChange={fileListMoi}
+                fileList={fileList}
+                beforeUpload={() => false}
+                onChange={({ fileList }) => setFileList(fileList)}
               >
                 <Button icon={<UploadOutlined />}>Tải Lên</Button>
               </Upload>
@@ -175,11 +173,8 @@ function Modal_sp(props) {
             </Form.Item>
           </Form>
         </Modal>
-      </>
-    );
-  } else {
-    return (
-      <>
+      )}
+      {props.action === "ChiTiet" && (
         <Modal
           title="Thông Tin Sản Phẩm"
           open={props.visible}
@@ -194,31 +189,31 @@ function Modal_sp(props) {
             <tbody>
               <tr>
                 <td rowspan="6" width="200" height="205">
-                  {Data && Data.Picture && (
+                  {data && data.Picture && (
                     <img
                       height="205"
                       width="200"
-                      src={"https://localhost:7177/" + Data.Picture}
+                      src={data.Picture}
                       alt="Ảnh sản phẩm"
                     />
                   )}
                 </td>
               </tr>
               <tr>
-                <td>Mã sản phẩm: {Data && Data.MSanPham} </td>
+                <td>Mã sản phẩm: {data && data.MSanPham} </td>
               </tr>
               <tr>
-                <td>Tên sản phẩm: {Data && Data.TenSP} </td>
+                <td>Tên sản phẩm: {data && data.TenSP} </td>
               </tr>
               <tr>
-                <td>Loại sản phẩm: {Data && Data.LoaiSanPham} </td>
+                <td>Loại sản phẩm: {data && data.LoaiSanPham} </td>
               </tr>
             </tbody>
           </table>
         </Modal>
-      </>
-    );
-  }
+      )}
+    </div>
+  );
 }
 
 export default Modal_sp;

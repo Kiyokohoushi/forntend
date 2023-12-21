@@ -24,7 +24,6 @@ function Modal_NhapHang(props) {
       SoLuong: values.SoLuong,
       DonGia: values.DonGia,
       ThanhTien: values.ThanhTien,
-      GiaBan: values.GiaBan,
     };
     await props.Save(Data);
   }
@@ -36,7 +35,6 @@ function Modal_NhapHang(props) {
       SoLuong: values.SoLuong,
       DonGia: values.DonGia,
       ThanhTien: values.ThanhTien,
-      GiaBan: values.GiaBan,
     };
     await props.Save(Data);
   }
@@ -72,9 +70,6 @@ function Modal_NhapHang(props) {
           </Form.Item>
           <Form.Item label="Thành tiền :" name={"ThanhTien"}>
             <Input name="ThanhTien" />
-          </Form.Item>
-          <Form.Item label="Giá bán :" name={"GiaBan"}>
-            <Input name="GiaBan" />
           </Form.Item>
         </Form>
       </Modal>

@@ -1,30 +1,35 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import logo from "../Images/logo.png";
-import facebook from "../Images/logo-facebook.png";
-import google from "../Images/Google__G__Logo.svg.webp";
-import apple from "../Images/apple.png";
-import nhatot from "../Images/pty-orange-logo.png";
-import xetot from "../Images/veh-orange-logo.png";
-import viectot from "../Images/job-green-logo.png";
+import logo from "../Images/Logo.png";
+import Pic1 from "../Images/woman-shopping-with-credit-card.webp";
 
 import "../../../../css/main.css";
 import axios from "axios";
-import { Form, message } from "antd";
-import { EyeOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input, message } from "antd";
+// import { EyeOutlined } from "@ant-design/icons";
 import { decodeJwt } from "jose";
+import { Header } from "antd/es/layout/layout";
+import { Apple, Facebook, Google, Password } from "@mui/icons-material";
 
 function Login(props) {
   const { pathname } = useLocation();
+  const [form] = Form.useForm();
   const [isLogin, setIsLogin] = useState();
   const navigate = useNavigate();
-  const phoneInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
-  const [showPassword, setShowPassword] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
+  const styleButton = {
+    margin: "10px",
+    padding: "5px",
+    width: "65px",
+    borderRadius: "20px",
+    display: "flex",
+    justifyContent: "center",
   };
+
+  // const toggleShowPassword = () => {
+  //   setShowPassword(!showPassword);
+  // };
 
   useEffect(() => {
     let loginCheck = localStorage.getItem("Token");
@@ -41,26 +46,29 @@ function Login(props) {
     }
   }
 
-  async function onFinish() {
-    const phoneNumber = phoneInputRef.current.value;
-    const password = passwordInputRef.current.value;
+  function hanldeLogin() {
+    form.submit();
+  }
 
-    if (!phoneNumber || !password) {
-      message.error("Vui lòng nhập Số điện thoại và Mật khẩu.");
-      return;
-    }
-
-    const values = {
-      PhoneNumber: phoneNumber,
-      Password: password,
+  async function onFinish(values) {
+    const Data = {
+      PhoneNumber: values.PhoneNumber,
+      Password: values.Password,
     };
 
     try {
-      const res = await axios.post("https://localhost:7177/api/auth/login", values);
+      console.log(Data);
+      const res = await axios.post(
+        "https://localhost:7177/api/auth/login",
+        Data
+      );
 
       if (res.data.Status === 1) {
         localStorage.setItem("Token", res.data.Token);
         localStorage.setItem("User", res.data.Username);
+        localStorage.setItem("PhoneNumber", res.data.PhoneNumber);
+        localStorage.setItem("RefreshToken", res.data.RefreshToken);
+        localStorage.setItem("ID", res.data.ID);
         CheckRole(res.data.Token);
         console.log(res);
         message.success(res.data.Message);
@@ -75,70 +83,141 @@ function Login(props) {
     <Navigate to={"/admin"} replace />
   ) : (
     <div className="Main-app">
-      <Form className="form" onFinish={onFinish}>
-        <div className="logo">
-          <img src={logo} alt="Logo" width="121px" height="44px" />
-        </div>
-        <h1 className="text">Đăng Nhập</h1>
-
-        <input ref={phoneInputRef} name="phoneNumber" placeholder="Số điện thoại" />
-        <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          ref={passwordInputRef}
-          placeholder="Mật khẩu"
-        />
-        <div className="eye-icon" onClick={toggleShowPassword}>
-          <EyeOutlined />
-        </div>
-
-        <Link to="/repass" className="link1">
-          Quên mật khẩu
-        </Link>
-        <button type="submit" className="Login">
-          ĐĂNG NHẬP
-        </button>
-        <div className="content">
-          <hr />
-          <p>Hoặc đăng nhập bằng</p>
-          <hr />
-        </div>
-        <div className="mainbottom">
-          <button className="bottom">
-            <img
-              src={facebook}
-              alt="logo"
-              style={{ marginRight: "10px" }}
-              height="21px"
-              width="21px"
-            />{" "}
-            Facebook
-          </button>
-          <button className="bottom">
-            <img src={google} alt="logo" className="small" /> Google
-          </button>
-          <button className="bottom">
-            <img src={apple} alt="logo" className="small" /> Apple ID
-          </button>
-        </div>
-        <p className="footage">
-          Chưa có tài khoản?{" "}
-          <Link to="/register" className="link">
-            Đăng ký tài khoản mới
-          </Link>
-        </p>
-      </Form>
-      <footer>
-        <div className="phattrien">
-          <div className="footer">
-            <p>Được phát triển bởi</p>
-            <img src={logo} alt="anh" className="footer-logo" />
-            <img src={nhatot} alt="anh" className="footer-logo" />
-            <img src={viectot} alt="anh" className="footer-logo" />
-            <img src={xetot} alt="anh" className="footer-logo" />
+      <Header
+        style={{
+          backgroundColor: "white",
+          margin: "0px",
+          padding: "0px",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div className="left">
+          <div className="BoxLogo">
+            <img src={logo} alt="Logo" width={44} height={44} />
+            <p className="Logo">Logo</p>
           </div>
         </div>
-      </footer>
+        <div className="right">
+          <p>
+            Bạn chưa có tài khoản ? <Link to="/register">Đăng ký</Link>
+          </p>
+        </div>
+      </Header>
+      <div className="LoginContent">
+        <div className="LoginBox">
+          <div className="LeftBox">
+            <div className="LeftBoxTitle">
+              <h1>Đăng nhập</h1>
+            </div>
+            <div className="LeftBoxContent">
+              <Form
+                form={form}
+                autoComplete="off"
+                onFinish={onFinish}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div className="InputLogin">
+                  <p>Số điện thoại</p>
+                  <Form.Item name={"PhoneNumber"}>
+                    <Input
+                      name="PhoneNumber"
+                      placeholder="Input phone number"
+                      style={{
+                        border: "0",
+                        backgroundColor: "#f3f4f6",
+                        width: "100%",
+                        height: "22px",
+                        margin: "0px",
+                        padding: "0px",
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="InputLogin">
+                <p>Mật khẩu</p>
+                <Form.Item name={"Password"}>
+                  <Input
+                    name="Password"
+                    placeholder="Enter at least 8 characters"
+                    type="password"
+                    style={{
+                      border: "0",
+                      backgroundColor: "#f3f4f6",
+                      width: "100%",
+                      height: "22px",
+                      margin: "0px",
+                      padding: "0px",
+                    }}
+                  />
+                </Form.Item>
+                </div>
+              </Form>
+              <div className="subTitle">
+                <div className="Checkbox">
+                  <Checkbox />
+                  <p>Remember me</p>
+                </div>
+                <Link to={"/repass"}>Quên mật khẩu?</Link>
+              </div>
+            </div>
+            <div className="LeftBoxBottom">
+              <Button
+                style={{
+                  width: "72%",
+                  borderRadius: "9px",
+                  backgroundColor: "#8658d2",
+                  height: "40px",
+                  color: "#fff",
+                  marginBottom: "25px",
+                }}
+                onClick={hanldeLogin}
+              >
+                Đăng nhập
+              </Button>
+
+              <div className="LeftBoxFooter">
+                <p
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Hoặc đăng nhập bằng
+                </p>
+                <div className="IconButton">
+                  <Button style={styleButton}>
+                    <Google fontSize="small" />
+                  </Button>
+                  <Button style={styleButton}>
+                    {/* <img
+                        src={facebook}
+                        alt="FaceBook"
+                        height={"20px"}
+                        width={"20px"} */}
+                    <Facebook fontSize="small" color="#4060a4" />
+                  </Button>
+                  <Button style={styleButton}>
+                    <Apple fontSize="small" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="RightBox">
+            <img src={Pic1} alt="Picture" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

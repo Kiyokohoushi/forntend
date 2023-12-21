@@ -76,7 +76,6 @@ function trangchu(props) {
             style={{
               backgroundColor: "white",
               minHeight: "700px",
-              marginTop: "70px",
               padding: 0,
             }}
           >

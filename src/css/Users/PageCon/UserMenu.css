@@ -1,0 +1,24 @@
+.TopSider{
+    display: flex;
+    margin: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #c7c7c7;
+}
+
+.BottomSider{
+    display: flex;
+    justify-content: center;
+}
+.BottomSider a{
+    color: black;
+}
+.NameAndFix{
+    margin-left: 10px;
+}
+.NameAndFix p{
+    font-weight: bold;
+}
+.MenuHide{
+    height: max-content;
+    margin-left: 20px;
+}

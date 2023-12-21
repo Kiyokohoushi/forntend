@@ -1,0 +1,38 @@
+.Header {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    display: flex;
+    justify-content: end;
+    width: 50%;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.right_header {
+    margin: 0;
+    padding: 0;
+    width: 50%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.AvatarHeader {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+.Content{
+    background-color: white;
+    margin-top: 2px;
+    margin-left: 2px;
+    padding: 5px;
+}

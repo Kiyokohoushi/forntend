@@ -2,122 +2,81 @@ import { message } from "antd";
 import axios from "axios";
 import { decodeJwt } from "jose";
 import React, { useEffect, useState } from "react";
-import { useLocation, Navigate, useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 
 function AuthLayout() {
-  const { pathname } = useLocation();
-  const [isLogin, setIsLogin] = useState(true);
+  const [token, setToken] = useState(null);
   const navigate = useNavigate();
-  const [tokenExpirationTimer, setTokenExpirationTimer] = useState(null);
-  const [token, setToken] = useState();
 
   useEffect(() => {
-    let checkToken= localStorage.getItem("Token");
-    setToken(checkToken);
-    // Kiểm tra trạng thái đăng nhập ban đầu
-    checkLoginStatus();
+    const Token = localStorage.getItem("Token");
+    const PhoneNumber = localStorage.getItem("PhoneNumber");
+    const RefreshToken = localStorage.getItem("RefreshToken");
+
+    if (Token === null) {
+      HandleLogout();
+    } else {
+      HandelCheckToken(Token, PhoneNumber, RefreshToken);
+
+      // Thiết lập thời gian chờ không hoạt động (ví dụ, đăng xuất sau 5 phút không hoạt động)
+      const inactivityTimeout = setTimeout(() => {
+        HandleLogout();
+      }, 5 * 60 * 1000);
+
+      // Dọn dẹp hẹn giờ khi component bị hủy
+      return () => {
+        clearTimeout(inactivityTimeout);
+      };
+    }
   }, []);
 
-  const refreshToken = async () => {
-    const decodedToken = decodeJwt(token);
-    try {
-      let dataRefresh = {
-        PhoneNumber: decodedToken.PhoneNumber,
-        RefreshToken: decodedToken.RefreshToken,
-        AccessToken: token,
-      };
-      const res = await axios.post("https://localhost:7177/api/auth/refresh", dataRefresh);
-      
-      if (res.data.Status === 1) {
-        console.log(res.data);
-        localStorage.setItem("Token", res.data.Token);
-        message.success(res.data.Message);
-        // Cập nhật hẹn giờ cho việc làm mới token
-        setupTokenExpirationTimer();
-      } else {
-        message.error(res.data.Message);
-      }
-    } catch (error) {
-      console.error("Lỗi làm mới token:", error);
-      // Xử lý lỗi khi không thể làm mới token
-      handleLogout();
-    }
-  };
+  function HandelCheckToken(Token, PhoneNumber, RefreshToken) {
+    const DecodeToken = decodeJwt(Token);
+    const CurrentTime = Math.floor(Date.now() / 1000);
+    const TimeToRefreshToken = DecodeToken.exp - CurrentTime;
 
-  const handleLogout = () => {
+    if (TimeToRefreshToken > 30) {
+      console.log(DecodeToken);
+      console.log(CurrentTime);
+    }
+    if (TimeToRefreshToken <= 0) {
+      console.log(DecodeToken);
+      console.log(CurrentTime);
+      HandleLogout();
+    }
+    if (TimeToRefreshToken <= 30) {
+      const Data = {
+        PhoneNumber: PhoneNumber,
+        RefreshToken: RefreshToken,
+        AccessToken: Token,
+      };
+      axios
+        .post("https://localhost:7177/api/auth/refresh", Data)
+        .then((res) => {
+          if (res.data.Status === 1) {
+            console.log(res.data);
+            const Token = res.data.Token;
+            const DecodeToken = decodeJwt(Token);
+            localStorage.setItem("Token", Token);
+            localStorage.setItem("PhoneNumber", DecodeToken.PhoneNumber);
+            localStorage.setItem("RefreshToken", res.data.RefreshToken);
+            setToken(res.data.Token);
+            message.success(res.data.Message);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }
+
+  function HandleLogout() {
     localStorage.removeItem("Token");
     localStorage.removeItem("User");
-    setIsLogin(false);
+    localStorage.removeItem("PhoneNumber");
+    localStorage.removeItem("RefreshToken");
     navigate("/login");
-  };
-
-  const setupTokenExpirationTimer = () => {
-    if (token) {
-      const decodedToken = decodeJwt(token);
-      try {
-        const tokenExp = decodedToken.exp * 1000;
-        const currentTime = Date.now();
-        const timeUntilExpiration = tokenExp - currentTime;
-
-        if (timeUntilExpiration > 20000) {
-          const timeToRefresh = timeUntilExpiration - 20000;
-          // Thiết lập hẹn giờ cho việc làm mới token trước khi hết hạn
-          const tokenTimer = setTimeout(refreshToken, timeToRefresh);
-          setTokenExpirationTimer(tokenTimer);
-        } else {
-          console.log("Ở đây lỗi")
-          handleLogout();
-        }
-      } catch (error) {
-        console.error("Lỗi giải mã token:", error);
-        handleLogout();
-      }
-    }
-  };
-
-  const userActivityTimeout = 5 * 60 * 1000; // 5 phút
-  let activityTimer = null;
-
-  const handleUserActivity = () => {
-    if (activityTimer) {
-      clearTimeout(activityTimer);
-    }
-    activityTimer = setTimeout(() => {
-      // Đăng xuất người dùng sau khi dừng hoạt động trong 5 phút
-      handleLogout();
-    }, userActivityTimeout);
-    resetTokenTimer();
-  };
-
-  const resetTokenTimer = () => {
-    if (tokenExpirationTimer) {
-      clearTimeout(tokenExpirationTimer);
-      setupTokenExpirationTimer();
-    }
-  };
-
-  useEffect(() => {
-    // Cleanup khi component unmount
-    return () => {
-      window.removeEventListener("mousemove", handleUserActivity);
-      window.removeEventListener("keydown", handleUserActivity);
-    };
-  }, []);
-
-  const checkLoginStatus = () => {
-    let loginCheck = localStorage.getItem("Token");
-    setIsLogin(!!loginCheck); // Đã đăng nhập nếu có token
-
-    if (loginCheck) {
-      setupTokenExpirationTimer();
-      // Bắt đầu theo dõi hoạt động của người dùng
-      window.addEventListener("mousemove", handleUserActivity);
-      window.addEventListener("keydown", handleUserActivity);
-    }
-  };
-
-  if (!isLogin && pathname !== "/login") {
-    return <Navigate to="/login" replace />;
+    setToken(null);
   }
 
   return (

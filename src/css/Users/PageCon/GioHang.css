@@ -1,0 +1,137 @@
+.FormCartMain {
+    margin-top: 60px;
+    margin-left: 90px;
+    margin-right: 90px;
+    padding: 0px;
+}
+
+.MainContent {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: max-content;
+    background-color: #f5f5f5;
+    gap: 10px;
+    justify-content: center;
+}
+
+.LeftContent {
+    width: 65%;
+    height: max-content;
+    background-color: #f5f5f5;
+}
+
+.TopLeftContent {
+    display: flex;
+    padding: 10px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    height: 40px;
+}
+
+.CheckboxWrap {
+    display: flex;
+    width: 50%;
+    height: max-content;
+    align-items: center;
+}
+
+.DeleteWrap {
+    display: flex;
+    width: 50%;
+    height: max-content;
+    align-items: center;
+    justify-content: end;
+}
+
+.BottomLeftContent {
+    width: 100%;
+    padding: 16px 0;
+    background-color: #f5f5f5;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: left;
+}
+
+.SanPhamCart {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: white;
+}
+
+.CartInner {
+    width: 100%;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}
+
+.CartLeft {
+    width: 45%;
+    display: flex;
+}
+.CartLeft p{
+    font-size: 15px;
+    margin: 10px;
+}
+.CartMiddle {
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.CartMiddle p{
+    font-size: 20px;
+    color: blueviolet;
+}
+
+.CartRight {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.CartRight p{
+    font-size: 15px;
+}
+
+.RightContent {
+    width: 30%;
+    padding: 10px;
+    height: max-content;
+    background-color: white;
+}
+
+.RightContentTop {
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-bottom: 5px;
+    width: 100%;
+    border-bottom: 1px solid #eff0f5;
+}
+
+.RightContentMid {
+    width: 100%;
+    height: max-content;
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eff0f5;
+    color: #757575
+}
+
+.RightContentBot {
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    width: 100%;
+    border-bottom: 1px solid #eff0f5;
+}
+.TamTinh{
+    display: flex; 
+    justify-content: space-between;
+}
