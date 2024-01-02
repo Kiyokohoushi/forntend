@@ -24,11 +24,12 @@ import GioHang from "./component/FormChild/Users/PageCon/GioHang/GioHang";
 import User2 from  "./component/FormChild/Users/PageCon/UserInfo/Menu";
 import Account from "./component/FormChild/Users/PageCon/UserInfo/Profile";
 import Respone from "./component/FormChild/Users/PageCon/ThanhToan/Respone";
+import XacNhan from "./component/FormChild/Users/PageCon/GioHang/XacNhan";
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route element={<AuthLayout />}> */}
+        <Route element={<AuthLayout />}>
           <Route path="/admin" element={<Home1 />}>
             <Route path="/admin/sanpham" element={<SanPham />} />
             <Route path="/admin/loaiSP" element={<LoaiSP />} />
@@ -46,8 +47,9 @@ const App = () => {
             <Route path="/user/account" element={<Account />}/>
             </Route>
             <Route path="/thanhtoan" element={<Respone/>} />
+            <Route path="/XacNhan" element={<XacNhan />} />
           </Route>
-        {/* </Route> */}
+        </Route>
         <Route path="login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/repass" element={<Repass />} />

@@ -1,31 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Checkbox, Layout, Button, Input, InputNumber } from "antd";
+import { Layout, Button, Input, InputNumber } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import { DeleteOutlined } from "@ant-design/icons";
 import "../../../../../css/Users/PageCon/GioHang.css";
-import { DeleteOutline } from "@mui/icons-material";
+import { DeleteOutline, LocationOnOutlined } from "@mui/icons-material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const GioHang = (props) => {
+function GioHang(props){
+  const navigate = useNavigate();
+  const IdUser = parseInt(localStorage.getItem("ID"));
   const [selectedItems, setSelectedItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const countitems = selectedItems.length;
   const [DsGioHang, setDSGioHang] = useState([]);
-  const [ThongTinSP, setThongTinSP] = useState();
+  // const [ThongTinSP, setThongTinSP] = useState();
   const Token = localStorage.getItem("Token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${Token}`;
-
-  const handleCheckboxChange = (id, price) => {
-    const isSelected = selectedItems.includes(id);
-
-    if (isSelected) {
-      setSelectedItems(selectedItems.filter((item) => item !== id));
-      setTotalPrice(totalPrice - price);
-    } else {
-      setSelectedItems([...selectedItems, id]);
-      setTotalPrice(totalPrice + price);
-    }
-  };
 
   const handleDeleteButtonClick = () => {
     // Xử lý xóa các sản phẩm đã chọn khỏi danh sách data
@@ -42,7 +33,6 @@ const GioHang = (props) => {
 
   // Danh Sach ro hang
   function getDSGioHang() {
-    const IdUser = parseInt(localStorage.getItem("ID"));
     axios
       .get("https://localhost:7177/api/GioHang/DanhSachSP?page=1")
       .then((res) => {
@@ -60,6 +50,15 @@ const GioHang = (props) => {
   //     console.error(err);
   //   });
   // }
+
+  function handleXacNhan(){
+    axios.post("https://localhost:7177/api/Payment/process-payment?idUser="+IdUser)
+    .then((res) =>{
+      const data= res.data;
+      localStorage.setItem("id_DH", data.OrderId);
+      navigate("/XacNhan", { state:{data}})
+    })
+  }
   useEffect(() => {
     getDSGioHang();
   }, []);
@@ -72,12 +71,12 @@ const GioHang = (props) => {
           padding: 0,
         }}
       >
-        <Header style={{ backgroundColor: "#f5f5f5", padding: 0 }}>
-          <h1>Giỏ Hàng</h1>
+        <Header style={{ backgroundColor: "#fff", padding:"10px", width:"100%", height:"max-content" }}>
+          <h1 style={{margin:"10px"}}>Giỏ Hàng</h1>
         </Header>
         <Content
           style={{
-            backgroundColor: "#f5f5f5",
+            backgroundColor: "#fff",
             minHeight: "700px",
             padding: 0,
           }}
@@ -85,13 +84,9 @@ const GioHang = (props) => {
           <div className="MainContent">
             <div className="LeftContent">
               <div className="TopLeftContent">
-                <div className="CheckboxWrap">
-                  <Checkbox style={{ marginRight: "10px" }} />
-                  <p>SELECT All</p>
-                </div>
                 <div className="DeleteWrap">
                   <DeleteOutlined onClick={handleDeleteButtonClick} />
-                  <p>DELETE</p>
+                  <p>Delete All</p>
                 </div>
               </div>
               <div className="BottomLeftContent">
@@ -99,12 +94,6 @@ const GioHang = (props) => {
                   <div className="SanPhamCart" key={item.ID_GioHang}>
                     <div className="CartInner">
                       <div className="CartLeft">
-                        <Checkbox
-                          style={{ marginRight: "10px" }}
-                          onChange={() =>
-                            handleCheckboxChange(item.ID_GioHang, item.GiaBan)
-                          }
-                        />
                         <img
                           src={item.Picture}
                           alt="Anh"
@@ -130,6 +119,10 @@ const GioHang = (props) => {
               </div>
             </div>
             <div className="RightContent">
+            <div className="RightContentTitle">
+              <h4 style={{display:"flex", alignItems:"center"}}><LocationOnOutlined fontSize="small"/>Địa chỉ :</h4>
+              <Input placeholder="Nhập địa chỉ vào đây..." style={{marginTop:"10px",border:"0px"}}/>
+            </div>
               <div className="RightContentTop">
                 <h2>Thông tin đơn hàng</h2>
               </div>
@@ -158,8 +151,9 @@ const GioHang = (props) => {
                     color: "white",
                     marginTop: "20px",
                   }}
+                  onClick={()=> handleXacNhan()}
                 >
-                  Xác nhận giỏ hàng ({countitems})
+                  Xác nhận đơn hàng
                 </Button>
               </div>
             </div>

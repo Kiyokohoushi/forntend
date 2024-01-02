@@ -1,0 +1,135 @@
+.MainContentXacNhanDH {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: max-content;
+    background-color: #fff;
+    gap: 10px;
+    justify-content: center;
+}
+.LeftContentXacNhanDH {
+    width: 65%;
+    height: max-content;
+    background-color: #fff;
+}
+.LeftContentTop_DH{
+    width: 100%;
+    height: max-content;
+    margin-bottom: 10px ;
+    padding: 0px;
+    border: 2px solid #ececec;
+    border-radius: 20px;
+}
+.MainCart_DH{
+    width: 100%;
+    height: max-content;
+    margin: 0px;
+}
+.TitleCart_DH{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ececec;
+}
+.CartItem{
+    width: 100%;
+    height: max-content;
+    margin: 0px;
+    padding: 10px;
+}
+.LeftContentMid_DH {
+    width: 100%;
+    height: max-content;
+    margin-bottom: 10px;
+    padding: 0px;
+    border: 2px solid #ececec;
+    border-radius: 20px;
+}
+.TitleShipping_DH {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ececec;
+}
+.SelectOption_DH{
+    width: 100%;
+    height: max-content;
+    display: flex;
+}
+.Option_DH{
+    width: 100%;
+    height: max-content;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #8a2be2;
+    border-radius: 20px;
+}
+.LeftContentBottom_DH{
+    width: 100%;
+    height: max-content;
+    margin: 0px;
+    padding: 0px;
+    border: 2px solid #ececec;
+    border-radius: 20px;
+}
+.Title_InfoUser{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ececec;
+}
+.Input_InfoUser{
+    width: 100%;
+    height: max-content;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.InputLeft_DH{
+    width: 49%;
+    height: max-content;
+}
+.InputRight_DH{
+    width: 49%;
+    height: max-content;
+}
+.InputAddress{
+    width: 100%;
+    height: max-content;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.RightContentXacNhanDH {
+    width: 30%;
+    padding: 0px;
+    height: max-content;
+    background-color: white;
+    border: 2px solid #ececec;
+    border-radius: 20px;
+}
+.RightContent_PTTT{
+    width: 100%;
+    height: max-content;
+}
+.Title_PTTT{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ececec;
+}
+.Main_PTTT{
+    width: 100%;
+    height: max-content;
+}

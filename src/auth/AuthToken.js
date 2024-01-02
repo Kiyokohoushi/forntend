@@ -9,75 +9,89 @@ function AuthLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const Token = localStorage.getItem("Token");
-    const PhoneNumber = localStorage.getItem("PhoneNumber");
-    const RefreshToken = localStorage.getItem("RefreshToken");
+    const checkToken = async () => {
+      const storedToken = localStorage.getItem("Token");
+      const phoneNumber = localStorage.getItem("PhoneNumber");
+      const refreshToken = localStorage.getItem("RefreshToken");
 
-    if (Token === null) {
-      HandleLogout();
-    } else {
-      HandelCheckToken(Token, PhoneNumber, RefreshToken);
+      if (!storedToken) {
+        handleLogout();
+      } else {
+        await handleCheckToken(storedToken, phoneNumber, refreshToken);
+        startUserInactivityTimer(); // Bắt đầu hẹn giờ đăng xuất khi không hoạt động
+      }
+    };
 
-      // Thiết lập thời gian chờ không hoạt động (ví dụ, đăng xuất sau 5 phút không hoạt động)
-      const inactivityTimeout = setTimeout(() => {
-        HandleLogout();
-      }, 5 * 60 * 1000);
+    const startUserInactivityTimer = () => {
+      const inactivityTimeout = 5 * 60 * 1000; // 5 phút
+      let inactivityTimer;
 
-      // Dọn dẹp hẹn giờ khi component bị hủy
-      return () => {
-        clearTimeout(inactivityTimeout);
+      const resetTimer = () => {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+          handleLogout();
+        }, inactivityTimeout);
       };
-    }
-  }, []);
 
-  function HandelCheckToken(Token, PhoneNumber, RefreshToken) {
-    const DecodeToken = decodeJwt(Token);
-    const CurrentTime = Math.floor(Date.now() / 1000);
-    const TimeToRefreshToken = DecodeToken.exp - CurrentTime;
+      // Gọi hàm resetTimer mỗi khi có sự kiện hoạt động của người dùng
+      const activityEvents = [
+        "mousemove",
+        "keydown",
+        "mousedown",
+        "touchstart",
+      ];
+      activityEvents.forEach((event) => {
+        document.addEventListener(event, resetTimer);
+      });
 
-    if (TimeToRefreshToken > 30) {
-      console.log(DecodeToken);
-      console.log(CurrentTime);
-    }
-    if (TimeToRefreshToken <= 0) {
-      console.log(DecodeToken);
-      console.log(CurrentTime);
-      HandleLogout();
-    }
-    if (TimeToRefreshToken <= 30) {
-      const Data = {
-        PhoneNumber: PhoneNumber,
-        RefreshToken: RefreshToken,
-        AccessToken: Token,
-      };
-      axios
-        .post("https://localhost:7177/api/auth/refresh", Data)
-        .then((res) => {
-          if (res.data.Status === 1) {
-            console.log(res.data);
-            const Token = res.data.Token;
-            const DecodeToken = decodeJwt(Token);
-            localStorage.setItem("Token", Token);
-            localStorage.setItem("PhoneNumber", DecodeToken.PhoneNumber);
-            localStorage.setItem("RefreshToken", res.data.RefreshToken);
-            setToken(res.data.Token);
-            message.success(res.data.Message);
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  }
+      // Đặt hẹn giờ khi ban đầu và mỗi khi làm mới mã thông báo
+      resetTimer();
+    };
 
-  function HandleLogout() {
-    localStorage.removeItem("Token");
-    localStorage.removeItem("User");
-    localStorage.removeItem("PhoneNumber");
-    localStorage.removeItem("RefreshToken");
+    checkToken();
+  }, []); // Bao gồm các phụ thuộc nếu cần
+
+  const handleCheckToken = async (token, phoneNumber, refreshToken) => {
+    try {
+      const decodedToken = decodeJwt(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      const timeToRefreshToken = decodedToken.exp - currentTime;
+      const refreshThreshold = 30;
+
+      if (timeToRefreshToken <= refreshThreshold) {
+        const data = {
+          PhoneNumber: phoneNumber,
+          RefreshToken: refreshToken,
+          AccessToken: token,
+        };
+
+        const response = await axios.post(
+          "https://localhost:7177/api/auth/refresh",
+          data
+        );
+
+        if (response.data.Status === 1) {
+          const newToken = response.data.Token;
+          const newDecodedToken = decodeJwt(newToken);
+
+          localStorage.setItem("Token", newToken);
+          localStorage.setItem("PhoneNumber", newDecodedToken.PhoneNumber);
+          localStorage.setItem("RefreshToken", response.data.RefreshToken);
+          setToken(newToken);
+          message.success(response.data.Message);
+        }
+      }
+    } catch (error) {
+      console.error("Lỗi khi giải mã hoặc làm mới mã thông báo:", error);
+      handleLogout();
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
     navigate("/login");
     setToken(null);
-  }
+  };
 
   return (
     <div>

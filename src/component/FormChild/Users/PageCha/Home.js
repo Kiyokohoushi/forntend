@@ -37,8 +37,7 @@ function Home(props) {
       cancelText: "Hủy",
       okText: "Có",
       onOk() {
-        localStorage.removeItem("Token");
-        localStorage.removeItem("User");
+        localStorage.clear();
         navigate("/login");
       },
     });
