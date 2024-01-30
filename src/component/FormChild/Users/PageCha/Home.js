@@ -2,22 +2,27 @@ import React, { useEffect, useState } from "react";
 import logo from "../PageCha/Image/Logo.png";
 import "../../../../css/Users/PageCha/Home.css";
 import { Content, Footer, Header } from "antd/es/layout/layout";
-import { Avatar, Button, Dropdown, Modal, Input, Layout, Space } from "antd";
+import { Avatar, Button, Dropdown, Modal, Input, Layout, Space, Badge } from "antd";
 import {
   SearchOutlined,
   ShoppingCartOutlined,
   BellOutlined,
   MailOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Home(props) {
+  const location = useLocation();
+  const IdUser = parseInt(localStorage.getItem("ID"));
   const { confirm } = Modal;
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState();
+  const [DsGioHang, setDsGioHang] = useState(0);
   const items = [
     {
-      label: <Link to={"/user"}>Tài khoản của tôi</Link>,
+      label: <Link to={"/user/account"}>Tài khoản của tôi</Link>,
     },
     {
       label: "Đơn hàng",
@@ -42,10 +47,19 @@ function Home(props) {
       },
     });
   }
+  function getDSGioHang() {
+    axios
+      .get("https://localhost:7177/api/GioHang/DanhSachSP?page=1")
+      .then((res) => {
+        const data = res.data.Data;
+        const LocDS = data.filter((items) => items.idUser === IdUser);  
+        setDsGioHang(LocDS);
+      });
+  }
   useEffect(() => {
     let CheckToken = localStorage.getItem("User");
-
     setIsLogin(CheckToken);
+    getDSGioHang()
   }, []);
   return (
     <div>
@@ -63,11 +77,11 @@ function Home(props) {
             <Space direction="horizontal" size={30}>
               <div className="BoxLogo">
                 <img src={logo} alt="Logo" width={44} height={44} />
-                <p className="Logo">Logo</p>
+                <p className="Logo">MR</p>
               </div>
               <div className="BoxMenu">
-                <Space direction="horizontal" size={30}>
-                  <Link to={"/"}>Trang chủ</Link>
+                <Space direction="horizontal" size={30} style={{ width:"100%", minHeight:"64px"}}>
+                  <Link to={"/"} className={location.pathname === "/"? "Active_Link":""}>Trang chủ</Link>
                   <Link to={"#"}>Trở thành người bán hàng</Link>
                   <Link to={"#"}>Khuyến mại</Link>
                   <Link to={"#"}>Thể loại</Link>
@@ -89,10 +103,12 @@ function Home(props) {
                 </div>
                 <div className="BoxOrderCart">
                   <Space direction="horizontal" size={10}>
-                    <Link to={"/GioHang"}>
+                  <Badge color={"#1677ff"} count={DsGioHang.length} size="small">
+                    <Link to={"/GioHang"} className={location.pathname==="/GioHang"?"Active_Cart":""}>
                       <ShoppingCartOutlined />
                       Giỏ hàng
                     </Link>
+                    </Badge>
                     <Link to={"/Notification"}>
                       <BellOutlined />
                     </Link>
@@ -102,9 +118,18 @@ function Home(props) {
               <div className="BoxAccount">
                 <div className="Name">
                   {isLogin ? (
-                    <p style={{ fontSize: "20px", color: "blueviolet" }}>
-                      {isLogin}
-                    </p>
+                    <div className="BoxIsLogin">
+                      <p style={{ fontSize: "20px", color: "blueviolet", marginRight:"5px" }}>
+                        {isLogin}
+                      </p>
+                      <Dropdown
+                        menu={{ items }}
+                        trigger={"click"}
+                        overlayStyle={{ width: "180px" }}
+                      >
+                        <Avatar icon={<UserOutlined/>} />
+                      </Dropdown>
+                    </div>
                   ) : (
                     <div className="ButtonAccount">
                       <Link to={"/register"}>Đăng ký</Link>
@@ -120,13 +145,6 @@ function Home(props) {
                     </div>
                   )}
                 </div>
-                <Dropdown
-                  menu={{ items }}
-                  trigger={"click"}
-                  overlayStyle={{ width: "180px" }}
-                >
-                  <Avatar />
-                </Dropdown>
               </div>
             </Space>
           </div>

@@ -66,7 +66,7 @@ function Register() {
         <div className="left">
           <div className="BoxLogo">
             <img src={logo} alt="Logo" width={44} height={44} />
-            <p className="Logo">Logo</p>
+            <p className="Logo">Moon Rabbit</p>
           </div>
         </div>
         <div className="right">

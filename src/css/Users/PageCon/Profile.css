@@ -1,0 +1,64 @@
+.Form_NhapHS{
+    width: 100%;
+    height: max-content;
+    display: flex;
+}
+.Title_HSUser{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 55px;
+    margin: 0px;
+    padding: 10px;
+    border-bottom: 1px solid #c7c7c7;
+}
+.FormNhap_Left{
+    width: 65%;
+    height: max-content;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    border-right: 1px solid #c7c7c7;
+}
+.Input_NHAPHS{
+    width: 500px;
+    float:right;
+    height: 35px;
+    margin: 0px;
+    padding: 0px;
+}
+.Button_NHAPHS{
+    width: 500px;
+    float: right;
+    display: flex;
+    justify-content: flex-end;
+}
+.FormNhap_Right{
+    width: 33%;
+    min-height: 426px;
+    float: right;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Avatar_FormNhapRight{
+    width: 100%;
+    height: max-content;
+}
+.avatar_NhapRight{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Button_NhapRight{
+    width: 100%;
+    height: 50%;
+    margin-top: 20px;
+    float: bottom;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

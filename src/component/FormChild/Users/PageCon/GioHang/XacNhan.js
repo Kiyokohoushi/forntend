@@ -1,7 +1,7 @@
-import { Checkbox, Input, Layout, Space } from "antd";
+import { Button, Checkbox, Input, Layout, Radio } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../../../../../css/Users/PageCon/XacNhan.css";
 import {
   AccountCircleOutlined,
@@ -9,8 +9,15 @@ import {
   LocalShippingOutlined,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
+import Paypal from "../image/PayPal_horizontally_Logo_2014.png";
+import axios from "axios";
 
 function XacNhan(props) {
+  const navigate = useNavigate();
+  const id_DH = localStorage.getItem("id_DH");
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const countitems = selectedItems.length;
   const location = useLocation();
   const data = location.state && location.state.data;
   const OptionDH = [
@@ -27,6 +34,15 @@ function XacNhan(props) {
       detail: "giao từ 1-2 ngày",
     },
   ];
+
+  function handleXacNhan() {
+    axios
+      .get("https://localhost:7177/api/Payment/start-payment/" + id_DH)
+      .then((res) => {
+      window.location.replace(res.data);
+      });
+  }
+
   return (
     <>
       <Layout
@@ -66,7 +82,7 @@ function XacNhan(props) {
                     <p>
                       Mã đơn hàng:{" "}
                       <span style={{ color: "#898ade", fontWeight: "bold" }}>
-                        {localStorage.getItem("id_DH")}
+                        {id_DH}
                       </span>
                     </p>
                   </div>
@@ -104,7 +120,7 @@ function XacNhan(props) {
               </div>
               <div className="LeftContentMid_DH">
                 <div className="MainLeftContentMid_DH">
-                  <div className="TitleShipping_DH">
+                  <div className="Title_Content">
                     <h3 style={{ display: "flex", alignItems: "center" }}>
                       <LocalShippingOutlined /> Tùy chọn hình thức giao hàng
                     </h3>
@@ -113,7 +129,18 @@ function XacNhan(props) {
                     {OptionDH.map((items) => (
                       <div className="Option_DH">
                         <div className="OptionItem" id={items.id}>
-                          {items.name}
+                        <Radio>
+                          <div className="Info_Option">
+                            <div className="Cost_Option">
+                              {new Intl.NumberFormat("vi-VN").format(
+                                items.cost
+                              )}{" "}
+                              đ
+                            </div>
+                            <div className="Name_Option">{items.name}</div>
+                            <div className="Detail_Option">{items.detail}</div>
+                          </div>
+                          </Radio>
                         </div>
                       </div>
                     ))}
@@ -122,7 +149,7 @@ function XacNhan(props) {
               </div>
               <div className="LeftContentBottom_DH">
                 <div className="MainContentBottom_DH">
-                  <div className="Title_InfoUser">
+                  <div className="Title_Content">
                     <h3 style={{ display: "flex", alignItems: "center" }}>
                       <AccountCircleOutlined /> Thông tin khách hàng
                     </h3>
@@ -139,28 +166,75 @@ function XacNhan(props) {
                   </div>
                   <div className="InputAddress">
                     <p>Địa chỉ</p>
-                    <Input/>
+                    <Input />
                   </div>
                 </div>
               </div>
             </div>
             <div className="RightContentXacNhanDH">
               <div className="RightContent_PTTT">
-              <div className="Title_PTTT">
-                <h3 style={{ display: "flex", alignItems: "center" }}>Phương thức thanh toán</h3>
-              </div>
-              <div className="Main_PTTT">
-                <p>Thay đổi phương thức thanh toán</p>
-                <Checkbox>Thanh toán khi nhận hàng</Checkbox>
-                <p>Hoặc</p>
-                <Checkbox></Checkbox>
-              </div>
+                <div className="Title_Content">
+                  <h3 style={{ display: "flex", alignItems: "center" }}>
+                    Phương thức thanh toán
+                  </h3>
+                </div>
+                <div className="Main_PTTT">
+                  <p>Thay đổi phương thức thanh toán</p>
+                  <Radio>Thanh toán khi nhận hàng</Radio>
+                  <p>Hoặc</p>
+                  <Radio>
+                    <img
+                      src={Paypal}
+                      alt="Paypal"
+                      width={"150px"}
+                      height={"40px"}
+                    />
+                  </Radio>
+                </div>
               </div>
               <div className="RightContent_CTTT">
-              <div className="Title_CTTT">
-                <h3 style={{ display: "flex", alignItems: "center" }}>Chi tiết thanh toán</h3>
-              </div>
-              <div className="Main_CTTT"></div>
+                <div className="Title_CTTT">
+                  <h3 style={{ display: "flex", alignItems: "center" }}>
+                    Chi tiết thanh toán
+                  </h3>
+                </div>
+                <div className="Main_CTTT">
+                  <div className="RightContentMid">
+                    <div className="TamTinh">
+                      <p>Tạm tính ({countitems} Sản phẩm) :</p>
+                      <p>
+                        {new Intl.NumberFormat("vi-VN").format(totalPrice)} đ
+                      </p>
+                    </div>
+                    <div className="TamTinh">
+                      <p>Phí vận chuyển :</p>
+                      <p>{new Intl.NumberFormat("vi-VN").format(25000)} đ</p>
+                    </div>
+                  </div>
+                  <div className="RightContentBot">
+                    <div className="TamTinh">
+                      <p>Tổng cộng :</p>
+                      <p>
+                        {new Intl.NumberFormat("vi-VN").format(
+                          totalPrice + 25000
+                        )}{" "}
+                        đ
+                      </p>
+                    </div>
+                    <Button
+                      style={{
+                        width: "100%",
+                        height: "40px",
+                        backgroundColor: "blueviolet",
+                        color: "white",
+                        marginTop: "20px",
+                      }}
+                      onClick={() => handleXacNhan()}
+                    >
+                      Đặt hàng
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

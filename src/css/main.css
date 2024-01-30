@@ -17,6 +17,15 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+.Main-app3 {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-image: url(../component/FormMain/Account/Images/sunset1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
 .left {
     margin: 0px;
     margin-left: 20px;
@@ -100,6 +109,19 @@
     margin: 0;
     padding: 0px;
 }
+.Input_Password{
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    height: 22px;
+    background-color: #f3f4f6;
+    border: none;
+}
+.Input_Password input{
+    background-color: #f3f4f6;
+    height: 22px;
+}
+
 .subTitle {
     margin-top: 10px;
     width: 72%;

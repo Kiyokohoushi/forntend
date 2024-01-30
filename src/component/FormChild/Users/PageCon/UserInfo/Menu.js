@@ -3,8 +3,8 @@ import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import "../../../../../css/Users/PageCon/UserMenu.css";
 import React, { useState } from "react";
-import { FormOutlined } from "@ant-design/icons";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { FormOutlined, UserOutlined } from "@ant-design/icons";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 
 function Menu(props) {
   const [Show, setShow] = useState(false);
@@ -30,7 +30,7 @@ function Menu(props) {
             </div>
             <div className="NameAndFix">
               <p>{localStorage.getItem("User")}</p>
-              <Link to={"/"}>
+              <Link to={"/user/account"}>
                 Sửa hồ sơ <FormOutlined />
               </Link>
             </div>
@@ -38,14 +38,44 @@ function Menu(props) {
           <div className="BottomSider">
             <div className="DropdownMenu">
               <Space direction="vertical">
-                <Link to={"/user/account"}>Tài khoản của tôi</Link>
-                {CurrentPathName === "/user/account" ? (
+                <Link to={"/user/account"}>
+                  <UserOutlined /> Tài khoản của tôi
+                </Link>
+                {CurrentPathName === "/user/account" ||
+                CurrentPathName === "/user/address" ||
+                CurrentPathName === "/user/repass" ? (
                   <div className="MenuHide">
                     <Space direction="vertical">
-                      <Link to={"/user/account/profile"}>Hồ sơ</Link>
-                      <Link to={"/user/payment"}>Ngân hàng</Link>
-                      <Link to={"/user/address"}>Địa chỉ</Link>
-                      <Link to={"/user/repass"}>Đổi mật khẩu</Link>
+                      <NavLink
+                        to="/user/account"
+                        className={
+                          location.pathname === "/user/account"
+                            ? "activeLink"
+                            : ""
+                        }
+                      >
+                        Hồ sơ
+                      </NavLink>
+                      <NavLink
+                        to="/user/address"
+                        className={
+                          location.pathname === "/user/address"
+                            ? "activeLink"
+                            : ""
+                        }
+                      >
+                        Địa chỉ
+                      </NavLink>
+                      <NavLink
+                        to="/user/repass"
+                        className={
+                          location.pathname === "/user/repass"
+                            ? "activeLink"
+                            : ""
+                        }
+                      >
+                        Đổi mật khẩu
+                      </NavLink>
                     </Space>
                   </div>
                 ) : null}

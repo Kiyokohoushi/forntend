@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Form, Input, Upload, message } from "antd";
+import { Button, Modal, Form, Input, Upload, message, Select } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 
@@ -16,6 +16,7 @@ function Modal_sp(props) {
   const [form] = Form.useForm();
   const id = props.dataEdit?.MSanPham;
   const [data, setData] = useState();
+  const [DSLoaiSanPham, setDSLoaiSanPham] = useState([]);
   const [fileList, setFileList] = useState([]);
 
   const updateFileList = async () => {
@@ -57,7 +58,20 @@ function Modal_sp(props) {
       console.error("Lỗi khi truy xuất chi tiết sản phẩm:", error);
     }
   };
+  async function GetDSLoaiSanPham() {
+    axios
+      .get("https://localhost:7177/api/LoaiSanPham/DanhSachLoaiSP?page=1")
+      .then((res) => {
+        setDSLoaiSanPham(res.data.Data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
+  useEffect(() => {
+    GetDSLoaiSanPham();
+  },[]);
   const handleSave = () => {
     form.submit();
   };
@@ -69,7 +83,7 @@ function Modal_sp(props) {
         formData.append("file", fileList[0]?.originFileObj);
         formData.append("MSanPham", values.MSanPham);
         formData.append("TenSP", values.TenSP);
-        formData.append("LoaiSanPham", values.LoaiSanPham);
+        formData.append("LoaiSanPham", values.loaiSanPham);
 
         await props.save(formData);
       }
@@ -160,16 +174,22 @@ function Modal_sp(props) {
               <Input name="TenSP" />
             </Form.Item>
             <Form.Item
-              name="LoaiSanPham"
+              name="loaiSanPham"
               label="Loại Sản Phẩm"
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng nhập loại sản phẩm.",
+                  message: "Vui lòng chọn hoặc cung cấp loại sản phẩm.",
                 },
               ]}
             >
-              <Input name="LoaiSanPham" />
+              <Select>
+                {DSLoaiSanPham.map((item) => (
+                  <option value={item.ID_LoaiSanPham} key={item.ID_LoaiSanPham}>
+                    {item.TenLoaiSP}
+                  </option>
+                ))}
+              </Select>
             </Form.Item>
           </Form>
         </Modal>

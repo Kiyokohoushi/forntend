@@ -48,7 +48,7 @@
     border: 2px solid #ececec;
     border-radius: 20px;
 }
-.TitleShipping_DH {
+.Title_Content{
     width: 100%;
     padding: 10px;
     display: flex;
@@ -65,8 +65,21 @@
     height: max-content;
     margin: 10px;
     padding: 10px;
+    background-color: #e0c8f7;
     border: 1px solid #8a2be2;
     border-radius: 20px;
+}
+.OptionItem{
+    width: 100%;
+    height: max-content;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+}
+.Infor_Option{
+    width: 100%;
+    height: max-content;
+    padding: 5px;
 }
 .LeftContentBottom_DH{
     width: 100%;
@@ -76,13 +89,7 @@
     border: 2px solid #ececec;
     border-radius: 20px;
 }
-.Title_InfoUser{
-    width: 100%;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    border-bottom: 2px solid #ececec;
-}
+
 .Input_InfoUser{
     width: 100%;
     height: max-content;
@@ -122,14 +129,15 @@
     width: 100%;
     height: max-content;
 }
-.Title_PTTT{
+.Main_PTTT{
+    width: 100%;
+    height: max-content;
+    padding: 10px;
+}
+.Title_CTTT{
     width: 100%;
     padding: 10px;
     display: flex;
     align-items: center;
-    border-bottom: 2px solid #ececec;
-}
-.Main_PTTT{
-    width: 100%;
-    height: max-content;
+    border-top: 2px solid #ececec;
 }

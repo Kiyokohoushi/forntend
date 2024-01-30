@@ -1,24 +1,42 @@
-.Banner{
-    
-}
-.Content{
+.Banner {}
 
+.Content-Inner {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 16%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
 }
-.RecomendStuff{
 
+.RecomendStuff {
+    margin: 0px;
+    padding: 0px;
+    border-bottom: 5px solid #992be2;
+    border-top: 5px solid #992be2;
 }
-.Top{
+
+.Top {
     display: flex;
     justify-content: space-between;
-    
-}
-.Fashion{
 
 }
-.BeautyAndHealth{
-
+.Top h1{
+    margin-bottom: 10px;
 }
-.scroll-container{
+
+.Fashion {
+    margin: 0px;
+    margin-top: 5px;
+    padding: 0px;
+}
+
+.BeautyAndHealth {
+    margin: 0px;
+    margin-bottom: 5px;
+    padding: 0px;
+}
+
+.scroll-container {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 11%;
@@ -26,12 +44,45 @@
     overflow-x: auto;
     overscroll-behavior-inline: contain;
 }
-.item{
+
+.item {
     margin: auto;
     padding: 0;
     text-align: center;
 }
-.item p{
-    margin-top:-40px;
+
+.item p {
+    margin-top: -40px;
     padding: 0;
+}
+.AllItems{
+    width: 100%;
+    height: max-content;
+    margin: 0px;
+    margin-top: 5px;
+    padding: 0px;
+}
+.AllItem_title{
+    display: flex;
+    margin: 0px;
+    padding: 10px;
+    width: 100%;
+    height: max-content;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid #8a2be2;
+    border-radius: 50px;
+    background-color: #e0c8f7;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
+}
+
+.AllItem_block{
+    margin: 0px;
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }

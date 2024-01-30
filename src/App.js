@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import AuthLayout from "./auth/AuthToken";
 import Register from "./component/FormMain/Account/Register/register";
 import Login from "./component/FormMain/Account/Login/login";
-import Repass from "./component/FormMain/Account/Repass/repass";
+import Repass1 from "./component/FormMain/Account/Repass/repass";
 
 //Admin routes
 import Home1 from "./component/FormChild/Admin/Home/home";
@@ -23,8 +23,13 @@ import Trangchu from "./component/FormChild/Users/PageCon/Trangchu/trangchu";
 import GioHang from "./component/FormChild/Users/PageCon/GioHang/GioHang";
 import User2 from  "./component/FormChild/Users/PageCon/UserInfo/Menu";
 import Account from "./component/FormChild/Users/PageCon/UserInfo/Profile";
+import Address from "./component/FormChild/Users/PageCon/UserInfo/Address";
+import Repass2 from "./component/FormChild/Users/PageCon/UserInfo/Repass";
 import Respone from "./component/FormChild/Users/PageCon/ThanhToan/Respone";
 import XacNhan from "./component/FormChild/Users/PageCon/GioHang/XacNhan";
+import Waitting from "./component/FormChild/Users/PageCon/ThanhToan/Waitting";
+
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -45,14 +50,17 @@ const App = () => {
             <Route path="/giohang" element={<GioHang />} />
             <Route path="/user" element={<User2 />}>
             <Route path="/user/account" element={<Account />}/>
+            <Route path="/user/repass" element={<Repass2 />}/>
+            <Route path="/user/address" element={<Address/>} />
             </Route>
-            <Route path="/thanhtoan" element={<Respone/>} />
+            <Route path="/respone" element={<Respone/>} />
             <Route path="/XacNhan" element={<XacNhan />} />
           </Route>
         </Route>
+        <Route path="/waitting" element={<Waitting/>} />
         <Route path="login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/repass" element={<Repass />} />
+        <Route path="/repass" element={<Repass1 />} />
       </Routes>
     </BrowserRouter>
   );

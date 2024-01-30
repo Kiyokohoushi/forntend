@@ -1,3 +1,7 @@
+.activeLink {
+    font-weight: bold;
+    /* Các thuộc tính CSS khác nếu cần */
+  }
 .TopSider{
     display: flex;
     margin: 10px;

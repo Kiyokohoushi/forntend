@@ -140,7 +140,7 @@ function GioHang(props){
                 <div className="TamTinh">
                   <p>Tổng cộng :</p>
                   <p>
-                    {new Intl.NumberFormat("vi-VN").format(totalPrice + 25000)}
+                    {new Intl.NumberFormat("vi-VN").format(totalPrice + 25000)} đ
                   </p>
                 </div>
                 <Button

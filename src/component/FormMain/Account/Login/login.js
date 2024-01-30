@@ -97,7 +97,7 @@ function Login(props) {
         <div className="left">
           <div className="BoxLogo">
             <img src={logo} alt="Logo" width={44} height={44} />
-            <p className="Logo">Logo</p>
+            <p className="Logo">Moon Rabbit</p>
           </div>
         </div>
         <div className="right">
@@ -145,18 +145,18 @@ function Login(props) {
                 <div className="InputLogin">
                 <p>Mật khẩu</p>
                 <Form.Item name={"Password"}>
-                  <Input
+                  <Input.Password
                     name="Password"
                     placeholder="Enter at least 8 characters"
-                    type="password"
-                    style={{
-                      border: "0",
-                      backgroundColor: "#f3f4f6",
-                      width: "100%",
-                      height: "22px",
-                      margin: "0px",
-                      padding: "0px",
-                    }}
+                    className="Input_Password"
+                    // style={{
+                    //   border: "0",
+                    //   backgroundColor: "#f3f4f6",
+                    //   width: "100%",
+                    //   height: "22px",
+                    //   margin: "0px",
+                    //   padding: "0px",
+                    // }}
                   />
                 </Form.Item>
                 </div>

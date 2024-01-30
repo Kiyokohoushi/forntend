@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Popconfirm, Table, message } from "antd";
+import { Button, Input, Pagination, Popconfirm, Table, message } from "antd";
 import Modalsp from "../Sp/QLSP/modal_sp";
 import {
   EyeOutlined,
@@ -12,6 +12,7 @@ import "../../../../css/SanPham.css";
 import axios from "axios";
 
 function Table_sp(props) {
+  const [currentPage, setCurrentPage] = useState(1);
   const [Visible, setVisibleModal] = useState(false);
   const [Action, setAction] = useState();
   const [DSSanPham, setDSSanPham] = useState([]);
@@ -20,13 +21,18 @@ function Table_sp(props) {
   const token = localStorage.getItem("Token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
+  const [pagination, setPagination] = React.useState({
+    total: DSSanPham.length, // Tổng số mục
+    showTotal: (total) => `Tổng ${total} items`,
+  });
+
   const handleSearch = () => {};
 
   useEffect(() => {
     // Gọi hàm handleSearch khi searchText thay đổi
     if (searchText.trim() === "") {
       // Nếu thanh tìm kiếm trống, hiển thị toàn bộ danh sách
-      getDSSanPham(1);
+      getAllData(1);
     } else {
       const regex = new RegExp(`^${searchText}`, "i");
       const filtered = DSSanPham.filter((item) => regex.test(item.TenSP));
@@ -34,17 +40,32 @@ function Table_sp(props) {
     }
   }, [searchText]);
 
-  function getDSSanPham() {
-    axios
-      .get("https://localhost:7177/api/SP/DanhSachSP?page=1")
-      .then((res) => {
-        setDSSanPham(res.data.Data);
-        console.log(res.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  async function getAllData() {
+    let allData = [];
+    let page = 1;
+
+    while (true) {
+      try {
+        const response = await axios.get(`https://localhost:7177/api/SP/DanhSachSP?page=${page}`);
+        const data = response.data.Data;
+
+        if (data.length === 0) {
+          // Không còn dữ liệu trang nào, thoát vòng lặp
+          break;
+        }
+
+        allData = allData.concat(data);
+        page++;
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu từ trang", page, ":", error);
+        break;
+      }
+    }
+
+    setDSSanPham(allData);
+    console.log(allData);
   }
+
 
   async function suaSP(formData) {
     await axios
@@ -63,7 +84,7 @@ function Table_sp(props) {
   }
 
   useEffect(() => {
-    getDSSanPham();
+    getAllData();
   }, []);
 
   function showEdit(data) {
@@ -86,7 +107,7 @@ function Table_sp(props) {
       .then((res) => {
         if (res.data.Data <= 1) {
           message.success(res.data.Message);
-          getDSSanPham();
+          getAllData();
         } else {
           message.error("Lỗi");
         }
@@ -99,7 +120,7 @@ function Table_sp(props) {
     if (Action === "Edit") {
       await suaSP(formData);
     }
-    await getDSSanPham();
+    await getAllData();
     hiddenModal();
   }
   function thaotac(data) {
@@ -187,7 +208,7 @@ function Table_sp(props) {
           </Button>
         </div>
       </div>
-      <Table columns={columns} dataSource={DSSanPham} bordered />
+      <Table columns={columns} dataSource={DSSanPham} pagination={pagination} bordered />
       <Modalsp
         visible={Visible}
         action={Action}

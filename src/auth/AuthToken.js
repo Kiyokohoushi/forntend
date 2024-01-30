@@ -18,7 +18,8 @@ function AuthLayout() {
         handleLogout();
       } else {
         await handleCheckToken(storedToken, phoneNumber, refreshToken);
-        startUserInactivityTimer(); // Bắt đầu hẹn giờ đăng xuất khi không hoạt động
+        startUserInactivityTimer();
+        startTokenRefreshTimer(storedToken, phoneNumber, refreshToken);
       }
     };
 
@@ -33,65 +34,110 @@ function AuthLayout() {
         }, inactivityTimeout);
       };
 
-      // Gọi hàm resetTimer mỗi khi có sự kiện hoạt động của người dùng
       const activityEvents = [
         "mousemove",
         "keydown",
         "mousedown",
         "touchstart",
       ];
+
       activityEvents.forEach((event) => {
         document.addEventListener(event, resetTimer);
       });
 
-      // Đặt hẹn giờ khi ban đầu và mỗi khi làm mới mã thông báo
       resetTimer();
+    };
+
+    const startTokenRefreshTimer = (StoredToken, PhoneNumber, RefreshToken) => {
+      let refreshTimer;
+
+      const refreshToken = async () => {
+        try {
+          const response = await axios.post(
+            "https://localhost:7177/api/auth/refresh",
+            {
+              PhoneNumber: PhoneNumber,
+              RefreshToken: RefreshToken,
+              AccessToken: StoredToken,
+            }
+          );
+
+          if (response.data.Status === 1) {
+            const newToken = response.data.Token;
+            const newDecodedToken = decodeJwt(newToken);
+
+            localStorage.setItem("Token", newToken);
+            localStorage.setItem("PhoneNumber", newDecodedToken.PhoneNumber);
+            localStorage.setItem("RefreshToken", response.data.RefreshToken);
+            setToken(newToken);
+            message.success(response.data.Message);
+            startTokenRefreshTimer(
+              newToken,
+              PhoneNumber,
+              response.data.RefreshToken
+            );
+          }
+        } catch (error) {
+          console.error("Lỗi khi làm mới token:", error);
+          handleLogout();
+        }
+      };
+
+      const resetRefreshTimer = () => {
+        clearTimeout(refreshTimer);
+
+        // Lấy thời điểm hiện tại
+        const currentTime = new Date().getTime();
+
+        // Lấy thời điểm hết hạn của token
+        const expirationTime = decodeJwt(StoredToken).exp * 1000;
+
+        // Tính toán thời gian còn lại đến khi token hết hạn
+        const timeToExpiration = expirationTime - currentTime;
+
+        // Thiết lập hẹn giờ làm mới token khi còn 1 phút
+        refreshTimer = setTimeout(() => {
+          refreshToken();
+        }, timeToExpiration - 60 * 1000); // 1 phút trước khi token hết hạn
+      };
+
+      // Đặt hẹn giờ khi ban đầu và mỗi khi làm mới mã thông báo
+      resetRefreshTimer();
+    };
+
+    const handleCheckToken = async (token, phoneNumber, refreshToken) => {
+      try {
+        const decodedToken = decodeJwt(token);
+        const currentTime = Math.floor(Date.now() / 1000);
+        const timeToRefreshToken = decodedToken.exp - currentTime;
+        const refreshThreshold = 60; // 1 phút
+
+        if (timeToRefreshToken <= 0) {
+          // Token đã hết hạn
+          console.log("Token has expired. Logging out...");
+          handleLogout();
+        } else if (timeToRefreshToken <= refreshThreshold) {
+          // Token sắp hết hạn, cần làm mới
+          console.log("Refreshing token...");
+          await refreshToken(phoneNumber, refreshToken, token);
+        } else {
+          // Token vẫn còn hiệu lực
+          console.log("Token is still valid.");
+        }
+      } catch (error) {
+        console.error("Error decoding or refreshing token:", error);
+        handleLogout();
+      }
+    };
+
+    const handleLogout = () => {
+      localStorage.clear();
+      navigate("/login");
+      setToken(null);
     };
 
     checkToken();
   }, []); // Bao gồm các phụ thuộc nếu cần
-
-  const handleCheckToken = async (token, phoneNumber, refreshToken) => {
-    try {
-      const decodedToken = decodeJwt(token);
-      const currentTime = Math.floor(Date.now() / 1000);
-      const timeToRefreshToken = decodedToken.exp - currentTime;
-      const refreshThreshold = 30;
-
-      if (timeToRefreshToken <= refreshThreshold) {
-        const data = {
-          PhoneNumber: phoneNumber,
-          RefreshToken: refreshToken,
-          AccessToken: token,
-        };
-
-        const response = await axios.post(
-          "https://localhost:7177/api/auth/refresh",
-          data
-        );
-
-        if (response.data.Status === 1) {
-          const newToken = response.data.Token;
-          const newDecodedToken = decodeJwt(newToken);
-
-          localStorage.setItem("Token", newToken);
-          localStorage.setItem("PhoneNumber", newDecodedToken.PhoneNumber);
-          localStorage.setItem("RefreshToken", response.data.RefreshToken);
-          setToken(newToken);
-          message.success(response.data.Message);
-        }
-      }
-    } catch (error) {
-      console.error("Lỗi khi giải mã hoặc làm mới mã thông báo:", error);
-      handleLogout();
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login");
-    setToken(null);
-  };
 
   return (
     <div>

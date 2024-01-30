@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
 }
-
 /*Left Header*/
 .Left {
     width: 45%;
@@ -23,12 +22,14 @@
     font-size: 20px;
 }
 
-.BoxMenu a {
+.BoxMenu a{
     font-family: 'Itim', cursive;
     font-size: 17px;
-    color: black;
+    color: inherit;
 }
-
+.BoxMenu a.Active_Link{
+    color: blueviolet;
+}   
 .BoxMenu a:hover {
     color: blueviolet;
 }
@@ -60,10 +61,19 @@
 .BoxOrderCart a:active {
     color: #0e59d1;
 }
+.BoxOrderCart a.Active_Cart{
+    color: #0e59d1;
+}
 
 .BoxAccount {
     display: flex;
     align-items: center;
+}
+.BoxIsLogin{
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    padding: 0px;
 }
 .Name{
     margin-right: 10px;
