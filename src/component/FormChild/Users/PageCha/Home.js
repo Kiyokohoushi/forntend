@@ -17,9 +17,11 @@ function Home(props) {
   const location = useLocation();
   const IdUser = parseInt(localStorage.getItem("ID"));
   const { confirm } = Modal;
+  const [SearchKeyWord, setSearchKeyWord]= useState();
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState();
   const [DsGioHang, setDsGioHang] = useState(0);
+  
   const items = [
     {
       label: <Link to={"/user/account"}>Tài khoản của tôi</Link>,
@@ -34,6 +36,13 @@ function Home(props) {
     },
   ];
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      // Thực hiện tìm kiếm ở đây, ví dụ:
+      navigate("/search",{state:{SearchKeyWord}})
+      setSearchKeyWord('')
+    }
+  };
   async function Logout() {
     confirm({
       centered: true,
@@ -99,6 +108,10 @@ function Home(props) {
                     style={{
                       borderRadius: "20px",
                     }}
+                    placeholder="Nhập từ khóa..."
+                    value={SearchKeyWord}
+                    onChange={(e) => setSearchKeyWord(e.target.value)}
+                    onKeyPress={handleKeyPress}
                   />
                 </div>
                 <div className="BoxOrderCart">

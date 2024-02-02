@@ -107,6 +107,7 @@ function ThemSP(props) {
                 },
               ]}
             >
+            <ImgCrop
               <Upload
                 name="picture"
                 listType="picture"

@@ -15,8 +15,10 @@ import IconThuCung from "../IconWeb/petStuff.png";
 import IconPhuTung from "../IconWeb/PhuTung.png";
 import IconTheThao from "../IconWeb/sport.png";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Trangchu(props) {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [DSSanPham, setDSSanPham] = useState([]);
   const [DSThoiTrang, setDSThoiTrang] = useState([]);
@@ -90,6 +92,9 @@ function Trangchu(props) {
         console.log(error);
       });
   }
+  function handle_Items(SanPham) {
+    navigate("/chitiet", { state: { SanPham } });
+  }
   useEffect(() => {
     getDSSanPham(currentPage);
   }, []);
@@ -156,6 +161,7 @@ function Trangchu(props) {
                             width={"38px"}
                           />
                         }
+                        onClick={() => handle_Items(items)}
                       ></Card>
                     ))}
                   </div>
@@ -186,6 +192,7 @@ function Trangchu(props) {
                             width={"48px"}
                           />
                         }
+                        onClick={() => handle_Items(items)}
                       ></Card>
                     ))}
                   </div>
@@ -197,7 +204,7 @@ function Trangchu(props) {
                 </div>
                 <div className="AllItem_content">
                   <div className="AllItem_block">
-                    {DSSanPham.slice(0,18).map((items) => (
+                    {DSSanPham.slice(0, 18).map((items) => (
                       <Card
                         id={items.MaSanPham}
                         hoverable
@@ -205,7 +212,7 @@ function Trangchu(props) {
                           border: "3px solid #f5f5f5",
                           width: 220,
                           height: 350,
-                          margin:"5px"
+                          margin: "5px",
                         }}
                         cover={
                           <img
@@ -215,6 +222,7 @@ function Trangchu(props) {
                             width={"38px"}
                           />
                         }
+                        onClick={() => handle_Items(items)}
                       ></Card>
                     ))}
                   </div>

@@ -28,7 +28,8 @@ import Repass2 from "./component/FormChild/Users/PageCon/UserInfo/Repass";
 import Respone from "./component/FormChild/Users/PageCon/ThanhToan/Respone";
 import XacNhan from "./component/FormChild/Users/PageCon/GioHang/XacNhan";
 import Waitting from "./component/FormChild/Users/PageCon/ThanhToan/Waitting";
-
+import Search from "./component/FormChild/Users/PageCon/Search/Search";
+import Chitiiet from "./component/FormChild/Users/PageCon/ChitietSP/Chitiiet";
 
 const App = () => {
   return (
@@ -53,8 +54,10 @@ const App = () => {
             <Route path="/user/repass" element={<Repass2 />}/>
             <Route path="/user/address" element={<Address/>} />
             </Route>
+            <Route path="/search" element={<Search/>} />
             <Route path="/respone" element={<Respone/>} />
             <Route path="/XacNhan" element={<XacNhan />} />
+            <Route path="/chitiet" element={<Chitiiet/>} />
           </Route>
         </Route>
         <Route path="/waitting" element={<Waitting/>} />
