@@ -88,6 +88,7 @@ function Modal_LoaiSP(props) {
             <Form.Item label={"Loại trạng thái :"}>
               <Select
                 style={{ width: "340px", float: "right" }}
+                defaultValue={true}
                 onChange={(value) => handleOptions(value)}
                 options={[
                   {

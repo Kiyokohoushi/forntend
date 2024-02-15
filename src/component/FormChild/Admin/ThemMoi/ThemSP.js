@@ -1,5 +1,6 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select, Upload, message } from "antd";
+import ImgCrop from "antd-img-crop";
 import { Content } from "antd/es/layout/layout";
 import axios from "axios";
 import React, { useEffect } from "react";
@@ -7,7 +8,7 @@ import { useState } from "react";
 
 function ThemSP(props) {
   const [form] = Form.useForm();
-  const [Anh, setAnh] = useState();
+  const [Anh, setAnh] = useState([]);
   const token = localStorage.getItem("Token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   const [DSLoaiSanPham, setDSLoaiSanPham] = useState([]);
@@ -16,17 +17,50 @@ function ThemSP(props) {
   // const [SoLuong, setSoLuong] = useState();
   // const [DonGia, setDonGia] = useState();
 
-  async function GetDSLoaiSanPham(){
-    axios.get("https://localhost:7177/api/LoaiSanPham/DanhSachLoaiSP?page=1")
-    .then((res)=>{
-      setDSLoaiSanPham(res.data.Data);
-    }).catch((err)=>{
-      console.log(err);
+  async function GetDSLoaiSanPham() {
+    axios
+      .get("https://localhost:7177/api/LoaiSanPham/DanhSachLoaiSP?page=1")
+      .then((res) => {
+        setDSLoaiSanPham(res.data.Data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  useEffect((res) => {
+    GetDSLoaiSanPham();
+  }, []);
+
+  function GetUrlPic(file){
+    new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file.originFileObj);
+      reader.onload = () => resolve(reader.result);
     });
   }
-  useEffect((res)=>{
-    GetDSLoaiSanPham();
-  },[]);
+  async function OnPreview(file){
+    const src = file.url || (await GetUrlPic(file));
+    const imgWindow = window.open(src);
+
+    if (imgWindow) {
+      const image = new Image();
+      image.src = src;
+      imgWindow.document.write(image.outerHTML);
+    } else {
+      window.location.href = src;
+    }
+  };
+  function handleBeforeUpload(file){
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      console.log(reader.result);
+      setAnh([{url: reader.result}]);
+    }
+    console.log(Anh)
+
+    return false;
+  }
   const onFinish = async (values) => {
     const formData = new FormData();
     formData.append("file", Anh);
@@ -91,9 +125,6 @@ function ThemSP(props) {
             <Form.Item
               name="picture"
               label="Hình Ảnh"
-              onChange={(e) => {
-                setAnh(e.target.files[0]);
-              }}
               rules={[
                 {
                   validator: (_, value) => {
@@ -107,18 +138,21 @@ function ThemSP(props) {
                 },
               ]}
             >
-            <ImgCrop
-              <Upload
-                name="picture"
-                listType="picture"
-                accept="jpg, gif, png, jpeg "
-                beforeUpload={(file) => {
-                  console.log(file);
-                  return false;
-                }}
-              >
-                <Button icon={<UploadOutlined />}>Tải Lên</Button>
-              </Upload>
+              <ImgCrop rotationSlider showReset>
+                <Upload
+                  name="picture"
+                  listType="picture-card"
+                  fileList={Anh}
+                  accept="jpg, gif, png, jpeg "
+                  onChange={({ fileList: newFileList }) => {
+                    setAnh(newFileList);
+                  }}
+                  onPreview={(file)=>OnPreview(file)}
+                  beforeUpload={(file)=>handleBeforeUpload(file)}
+                >
+                  {Anh.length < 1 && <UploadOutlined />}
+                </Upload>
+              </ImgCrop>
             </Form.Item>
             <Form.Item
               name="mSanPham"
@@ -155,12 +189,12 @@ function ThemSP(props) {
                 },
               ]}
             >
-              <Select
-  
-              >
-              {DSLoaiSanPham.map((item) => (
-                <option value={item.ID_LoaiSanPham} key={item.ID_LoaiSanPham}>{item.TenLoaiSP}</option>
-              ))}
+              <Select>
+                {DSLoaiSanPham.map((item) => (
+                  <option value={item.ID_LoaiSanPham} key={item.ID_LoaiSanPham}>
+                    {item.TenLoaiSP}
+                  </option>
+                ))}
               </Select>
             </Form.Item>
 

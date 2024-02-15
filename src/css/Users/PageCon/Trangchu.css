@@ -1,12 +1,13 @@
 .Banner {}
 
-.Content-Inner {
+/* .Content-Inner {
+    position: relative;
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 16%;
     overflow-x: auto;
     overscroll-behavior-inline: contain;
-}
+} */
 
 .RecomendStuff {
     margin: 0px;
@@ -18,9 +19,9 @@
 .Top {
     display: flex;
     justify-content: space-between;
-
 }
-.Top h1{
+
+.Top h1 {
     margin-bottom: 10px;
 }
 
@@ -36,12 +37,50 @@
     padding: 0px;
 }
 
-.scroll-container {
+.scroll-containerMenu {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 11%;
     justify-items: center;
     overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+
+.Content-Inner {
+    position: relative;
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto 1fr auto;
+    /* Sửa thành cột chia 3 phần */
+    overflow-x: hidden;
+    overscroll-behavior-inline: contain;
+}
+
+.scroll-button {
+    position: relative;
+    /* Thay đổi từ 'absolute' thành 'relative' */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.scroll-container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 16%;
+    /* Adjust the column width */
+    justify-items: center;
+    overflow-x: hidden;
+    /* Hide the scrollbar */
     overscroll-behavior-inline: contain;
 }
 
@@ -55,14 +94,16 @@
     margin-top: -40px;
     padding: 0;
 }
-.AllItems{
+
+.AllItems {
     width: 100%;
     height: max-content;
     margin: 0px;
     margin-top: 5px;
     padding: 0px;
 }
-.AllItem_title{
+
+.AllItem_title {
     display: flex;
     margin: 0px;
     padding: 10px;
@@ -79,10 +120,16 @@
     -o-border-radius: 50px;
 }
 
-.AllItem_block{
+.AllItem_block {
     margin: 0px;
     margin-top: 5px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
+}
+
+/* Antd */
+.ant-card .ant-card-body {
+    padding: 0px;
+    border-radius: 0 0 8px 8px;
 }

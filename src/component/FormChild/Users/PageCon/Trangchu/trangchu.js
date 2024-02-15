@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../../../../css/Users/PageCon/Trangchu.css";
 import Banner from "../image/BlackFriday.png";
-import { Card, Layout, Rate, Space } from "antd";
+import {Layout, Space } from "antd";
 import { RightOutlined } from "@ant-design/icons";
 import { Content, Header } from "antd/es/layout/layout";
 import IconFashion from "../IconWeb/dress.png";
@@ -14,6 +14,7 @@ import IconDoChoi from "../IconWeb/toys.png";
 import IconThuCung from "../IconWeb/petStuff.png";
 import IconPhuTung from "../IconWeb/PhuTung.png";
 import IconTheThao from "../IconWeb/sport.png";
+import CardSP from "../CardSP";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -76,27 +77,46 @@ function Trangchu(props) {
       Name: "Thú cưng ",
     },
   ];
-  function getDSSanPham(page) {
-    axios
-      .get(`https://localhost:7177/api/TrangChuDSSP/DanhSachSP?page=${page}`)
-      .then((res) => {
-        const data = res.data.Data;
-        const LocTT = data.filter((items) => items.ID_LoaiSanPham === 1);
-        const LocSK = data.filter((items) => items.ID_LoaiSanPham === 5);
-        setDSSanPham(data);
-        setDSThoiTrang(LocTT);
-        setDSSucKhoe(LocSK);
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  async function getDSSanPham() {
+    let allData = [];
+    let page = 1;
+
+    while (true) {
+      try {
+        const response = await axios.get(
+          `https://localhost:7177/api/TrangChuDSSP/DanhSachSP?page=${page}`
+        );
+        const data = response.data.Data;
+
+        if (data.length === 0) {
+          // Không còn dữ liệu trang nào, thoát vòng lặp
+          break;
+        }
+
+        allData = allData.concat(data);
+        page++;
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu từ trang", page, ":", error);
+        break;
+      }
+    }
+    const LocTT = allData.filter((items) => items.ID_LoaiSanPham === 1);
+    const LocSK = allData.filter((items) => items.ID_LoaiSanPham === 5);
+    setDSSanPham(allData);
+    setDSThoiTrang(LocTT);
+    setDSSucKhoe(LocSK);
+    console.log(allData);
   }
   function handle_Items(SanPham) {
     navigate("/chitiet", { state: { SanPham } });
   }
+  function scrollHandler(direction, containerId) {
+    const scrollContainer = document.getElementById(containerId);
+    const scrollAmount = 230 * direction; // Adjust the value as needed
+    scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
   useEffect(() => {
-    getDSSanPham(currentPage);
+    getDSSanPham();
   }, []);
   return (
     <div>
@@ -118,7 +138,7 @@ function Trangchu(props) {
             </div>
 
             <div className="SlideMenu">
-              <div className="scroll-container">
+              <div className="scroll-containerMenu">
                 {items.map((item) => (
                   <div key={item.key} className="item">
                     <img
@@ -144,26 +164,28 @@ function Trangchu(props) {
                     </h5>
                   </div>
                   <div className="Content-Inner">
-                    {DSThoiTrang.map((items) => (
-                      <Card
-                        id={items.MaSanPham}
-                        hoverable
-                        style={{
-                          border: "3px solid #f5f5f5",
-                          width: 220,
-                          height: 350,
-                        }}
-                        cover={
-                          <img
-                            src={items.Picture}
-                            alt="Ảnh sản phẩm"
-                            height={"260px"}
-                            width={"38px"}
-                          />
-                        }
-                        onClick={() => handle_Items(items)}
-                      ></Card>
-                    ))}
+                    <button
+                      className="scroll-button"
+                      onClick={() =>
+                        scrollHandler(-1, "scrollContainerFashion")
+                      }
+                    >
+                      &lt;
+                    </button>
+                    <div
+                      className="scroll-container"
+                      id="scrollContainerFashion"
+                    >
+                      {DSThoiTrang.map((items) => (
+                        <CardSP items={items} handle_Items={handle_Items} />
+                      ))}
+                    </div>
+                    <button
+                      className="scroll-button"
+                      onClick={() => scrollHandler(1, "scrollContainerFashion")}
+                    >
+                      &gt;
+                    </button>
                   </div>
                 </div>
 
@@ -175,26 +197,26 @@ function Trangchu(props) {
                     </h5>
                   </div>
                   <div className="Content-Inner">
-                    {DSSucKhoe.map((items) => (
-                      <Card
-                        id={items.MaSanPham}
-                        hoverable
-                        style={{
-                          border: "3px solid #f5f5f5",
-                          width: 220,
-                          height: 350,
-                        }}
-                        cover={
-                          <img
-                            src={items.Picture}
-                            alt="Ảnh sản phẩm"
-                            height={"260px"}
-                            width={"48px"}
-                          />
-                        }
-                        onClick={() => handle_Items(items)}
-                      ></Card>
-                    ))}
+                    <button
+                      className="scroll-button"
+                      onClick={() => scrollHandler(-1, "scrollContainerHealth")}
+                    >
+                      &lt;
+                    </button>
+                    <div
+                      className="scroll-container"
+                      id="scrollContainerHealth"
+                    >
+                      {DSSucKhoe.map((items) => (
+                        <CardSP items={items} handle_Items={handle_Items} />
+                      ))}
+                    </div>
+                    <button
+                      className="scroll-button"
+                      onClick={() => scrollHandler(1, "scrollContainerHealth")}
+                    >
+                      &gt;
+                    </button>
                   </div>
                 </div>
               </div>
@@ -205,25 +227,11 @@ function Trangchu(props) {
                 <div className="AllItem_content">
                   <div className="AllItem_block">
                     {DSSanPham.slice(0, 18).map((items) => (
-                      <Card
-                        id={items.MaSanPham}
-                        hoverable
-                        style={{
-                          border: "3px solid #f5f5f5",
-                          width: 220,
-                          height: 350,
-                          margin: "5px",
-                        }}
-                        cover={
-                          <img
-                            src={items.Picture}
-                            alt="Ảnh sản phẩm"
-                            height={"260px"}
-                            width={"38px"}
-                          />
-                        }
-                        onClick={() => handle_Items(items)}
-                      ></Card>
+                      <CardSP
+                        style={{ margin: "5px" }}
+                        items={items}
+                        handle_Items={handle_Items}
+                      />
                     ))}
                   </div>
                 </div>
